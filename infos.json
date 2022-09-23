@@ -1,0 +1,21 @@
+{
+  "name": "Minecraft",
+  "menus": [
+    {
+      "name_menu": "Minecraft",
+      "icon_menu": "fas fa-cube",
+      "url_menu": "",
+      "urls_submenu": {
+        "Configuration": "minecraft/settings",
+        "Serveurs": "minecraft/servers"
+      },
+      "urls_submenu_en": {
+        "Configuration": "minecraft/settings",
+        "Servers": "minecraft/servers"
+      }
+    }
+  ],
+  "description": "Connectez votre site à votre serveur Minecraft",
+  "version": "1.0.0",
+  "author": "CraftMyWebsite Team"
+}
