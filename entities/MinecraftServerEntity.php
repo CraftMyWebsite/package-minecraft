@@ -8,17 +8,17 @@ class MinecraftServerEntity
     private int $serverId;
     private string $serverName;
     private string $serverIp;
-    private ?string $serverPort;
+    private ?int $serverPort;
     private string $serverLastUpdate;
 
     /**
      * @param int $serverId
      * @param string $serverName
      * @param string $serverIp
-     * @param string|null $serverPort
+     * @param int|null $serverPort
      * @param string $serverLastUpdate
      */
-    public function __construct(int $serverId, string $serverName, string $serverIp, ?string $serverPort, string $serverLastUpdate)
+    public function __construct(int $serverId, string $serverName, string $serverIp, ?int $serverPort, string $serverLastUpdate)
     {
         $this->serverId = $serverId;
         $this->serverName = $serverName;
@@ -52,11 +52,11 @@ class MinecraftServerEntity
     }
 
     /**
-     * @return string|null
+     * @return int|null
      */
-    public function getServerPort(): ?string
+    public function getServerPort(): ?int
     {
-        return $this->serverPort;
+        return ($this->serverPort ?? 25565);
     }
 
     /**
