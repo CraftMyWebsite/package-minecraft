@@ -1,5 +1,6 @@
 <?php
 
+use CMW\Controller\Minecraft\MinecraftController;
 use CMW\Entity\Minecraft\MinecraftServerEntity;
 use CMW\Manager\Lang\LangManager;
 
@@ -37,6 +38,11 @@ $description = LangManager::translate("minecraft.servers.desc");
                                             <a class="d-block w-100 collapsed" data-toggle="collapse"
                                                href="#collapse<?= $server->getServerId() ?>" aria-expanded="false">
                                                 <?= $server->getServerName() ?>
+
+                                                <small class="float-right">
+                                                    <i class="fa-solid fa-users mr-1"></i>
+                                                    <?= MinecraftController::pingServer($server->getServerIp(), ($server->getServerPort() ?? 25565))->getPlayersOnline() ?>
+                                                </small>
                                             </a>
                                         </h4>
                                     </div>
