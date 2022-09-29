@@ -3,10 +3,17 @@
 namespace CMW\Controller\Minecraft;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Entity\Minecraft\MinecraftPingEntity;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
+use xPaw\MinecraftPing;
+use xPaw\MinecraftPingException;
+
+require_once(getenv("DIR") . 'app/package/minecraft/vendors/MinecraftPing/MinecraftPing.php');
+require_once(getenv("DIR") . 'app/package/minecraft/vendors/MinecraftPing/MinecraftPingException.php');
+
 
 /**
  * Class: @MinecraftController
@@ -23,6 +30,14 @@ class MinecraftController extends CoreController
     {
         parent::__construct($theme_path);
         $this->minecraftModel = new MinecraftModel();
+    }
+
+    #[Link("/servers/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
+    public function adminServersDelete(int $id): void
+    {
+        $this->minecraftModel->deleteServer($id);
+
+        header("Location: ../../servers");
     }
 
     #[Link(path: "/minecraft", method: Link::GET, scope: "/cmw-admin")]
@@ -57,12 +72,48 @@ class MinecraftController extends CoreController
         header("Location: servers");
     }
 
-    #[Link("/servers/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
-    public function adminServersDelete(int $id): void
-    {
-        $this->minecraftModel->deleteServer($id);
 
-        header("Location: ../../servers");
+
+    /*
+     *
+     * TOOLS FUNCTIONS
+     *
+     */
+
+
+    /**
+     * @param string $host
+     * @param int|null $port
+     * @return \CMW\Entity\Minecraft\MinecraftPingEntity|null
+     * @desc Ping server and get some data
+     */
+    public static function pingServer(string $host, ?int $port = 25565): ?MinecraftPingEntity
+    {
+        try {
+            $query = new MinecraftPing($host, $port, 2);
+
+            return $query->Query();
+        } catch (MinecraftPingException $e) {
+            echo $e->getMessage();
+        } finally {
+            $query?->Close();
+        }
+        return null;
     }
+
+    public static function pingServerOld(string $host, ?int $port = 25565)
+    {
+        try {
+            $query = new MinecraftPing($host, $port, 2);
+
+            return $query->QueryOldPre17();
+        } catch (MinecraftPingException $e) {
+            echo $e->getMessage();
+        } finally {
+            $query?->Close();
+        }
+        return null;
+    }
+
 
 }
