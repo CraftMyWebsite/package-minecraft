@@ -41,7 +41,7 @@ $description = LangManager::translate("minecraft.servers.desc");
 
                                                 <small class="float-right">
                                                     <i class="fa-solid fa-users mr-1"></i>
-                                                    <?= MinecraftController::pingServer($server->getServerIp(), ($server->getServerPort() ?? 25565))->getPlayersOnline() ?>
+                                                    <?= MinecraftController::pingServer($server->getServerIp(), $server->getServerPort())->getPlayersOnline() ?>
                                                 </small>
                                             </a>
                                         </h4>

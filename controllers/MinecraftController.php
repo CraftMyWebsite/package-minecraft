@@ -115,5 +115,15 @@ class MinecraftController extends CoreController
         return null;
     }
 
+    //TODO Try to optimize that
+    public static function getTotalPlayersOnlines(): int
+    {
+        $toReturn = 0;
+        foreach ((new MinecraftModel())->getServers() as $server){
+            $toReturn += self::pingServer($server->getServerIp(), $server->getServerPort())?->getPlayersOnline();
+        }
+        return $toReturn;
+    }
+
 
 }

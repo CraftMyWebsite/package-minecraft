@@ -40,6 +40,9 @@ class MinecraftModel extends DatabaseManager
         );
     }
 
+    /**
+     * @return MinecraftServerEntity[] array
+     */
     public function getServers(): array
     {
         $sql = "SELECT * FROM cmw_minecraft_servers";
