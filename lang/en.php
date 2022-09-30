@@ -17,6 +17,12 @@ return [
             ],
         ],
         "add" => "Add a server",
+        "status" => [
+            "title" => "Status of this server",
+            "maintenance" => "Maintenance",
+            "offline" => "Offline",
+            "online" => "Online",
+        ],
     ],
 
 ];

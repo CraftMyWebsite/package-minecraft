@@ -17,7 +17,7 @@ class MinecraftModel extends DatabaseManager
 
     public function getServerById(int $id): ?MinecraftServerEntity
     {
-        $sql = "SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, 
+        $sql = "SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, minecraft_server_status, 
                 DATE_FORMAT(minecraft_server_last_update, '%d/%m/%Y à %H:%i:%s') AS 'minecraft_server_last_update' 
                 FROM cmw_minecraft_servers WHERE minecraft_server_id = :server_id";
 
@@ -37,6 +37,7 @@ class MinecraftModel extends DatabaseManager
             $res['minecraft_server_ip'],
             $res['minecraft_server_port'] ?? null,
             $res['minecraft_server_last_update'],
+            $res['minecraft_server_status']
         );
     }
 
@@ -61,16 +62,17 @@ class MinecraftModel extends DatabaseManager
         return $toReturn;
     }
 
-    public function addServer(string $serverName, string $serverIp, int|null $serverPort = null): ?MinecraftServerEntity
+    public function addServer(string $serverName, string $serverIp, int $serverStatus, int|null $serverPort = null): ?MinecraftServerEntity
     {
         $var = array(
             "name" => $serverName,
             "ip" => $serverIp,
-            "port" => $serverPort ?? null
+            "port" => $serverPort ?? null,
+            "status" => $serverStatus
         );
 
-        $sql = "INSERT INTO cmw_minecraft_servers (minecraft_server_name, minecraft_server_ip, minecraft_server_port)
-                VALUES (:name, :ip, :port)";
+        $sql = "INSERT INTO cmw_minecraft_servers (minecraft_server_name, minecraft_server_ip, minecraft_server_port, minecraft_server_status)
+                VALUES (:name, :ip, :port, :status)";
 
         $db = self::getInstance();
         $req = $db->prepare($sql);
@@ -82,17 +84,19 @@ class MinecraftModel extends DatabaseManager
         return null;
     }
 
-    public function updateServer(int $id, string $name, string $ip, int|null $port = null): ?MinecraftServerEntity
+    public function updateServer(int $id, string $name, string $ip, int $serverStatus, int|null $port = null): ?MinecraftServerEntity
     {
         $var = array(
             "id" => $id,
             "name" => $name,
             "ip" => $ip,
-            "port" => $port ?? null
+            "port" => $port ?? null,
+            "status" => $serverStatus
         );
 
         $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_name = :name, minecraft_server_ip = :ip, 
-                                 minecraft_server_port = :port WHERE minecraft_server_id = :id";
+                                minecraft_server_port = :port, minecraft_server_status = :status
+                                WHERE minecraft_server_id = :id";
 
         $db = self::getInstance();
         $req = $db->prepare($sql);

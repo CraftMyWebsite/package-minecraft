@@ -39,6 +39,10 @@ $description = LangManager::translate("minecraft.servers.desc");
                                                href="#collapse<?= $server->getServerId() ?>" aria-expanded="false">
                                                 <?= $server->getServerName() ?>
 
+                                                <span class="badge badge-<?= ($server->getServerStatus() === -1) ? 'warning' :
+                                                                             (($server->getServerStatus() === 0) ? 'danger' : 'success') ?>">
+                                                </span>
+
                                                 <small class="float-right">
                                                     <i class="fa-solid fa-users mr-1"></i>
                                                     <?= MinecraftController::pingServer($server->getServerIp(), $server->getServerPort())->getPlayersOnline() ?>
@@ -47,7 +51,7 @@ $description = LangManager::translate("minecraft.servers.desc");
                                         </h4>
                                     </div>
                                     <div id="collapse<?= $server->getServerId() ?>" class="collapse"
-                                         data-parent="#accordion" style="">
+                                         data-parent="#accordion">
                                         <div class="card-body">
                                             <form action="" method="post">
 
@@ -82,6 +86,23 @@ $description = LangManager::translate("minecraft.servers.desc");
                                                     <input type="number" name="port" id="port" class="form-control"
                                                            placeholder="25565"
                                                            value="<?= $server->getServerPort() ?>">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="status"><?= LangManager::translate("minecraft.servers.status.title") ?></label>
+                                                    <select name="status" id="status" class="form-control">
+                                                        <option value="-1" <?= $server->getServerStatus() === -1 ? "selected" : "" ?>>
+                                                            <?= LangManager::translate("minecraft.servers.status.maintenance") ?>
+                                                        </option>
+
+                                                        <option value="0" <?= $server->getServerStatus() === 0 ? "selected" : "" ?>>
+                                                            <?= LangManager::translate("minecraft.servers.status.offline") ?>
+                                                        </option>
+
+                                                        <option value="1" <?= $server->getServerStatus() === 1 ? "selected" : "" ?>>
+                                                            <?= LangManager::translate("minecraft.servers.status.online") ?>
+                                                        </option>
+                                                    </select>
                                                 </div>
 
                                                 <input type="submit"
@@ -196,6 +217,15 @@ $description = LangManager::translate("minecraft.servers.desc");
                             <input type="number" name="port" class="form-control"
                                    placeholder="25565" minlength="1" maxlength="5">
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status"><?= LangManager::translate("minecraft.servers.status.title") ?></label>
+                        <select name="status" id="status" class="form-control">
+                            <option value="-1" selected><?= LangManager::translate("minecraft.servers.status.maintenance") ?></option>
+                            <option value="0"><?= LangManager::translate("minecraft.servers.status.offline") ?></option>
+                            <option value="1"><?= LangManager::translate("minecraft.servers.status.online") ?></option>
+                        </select>
                     </div>
 
                 </div>

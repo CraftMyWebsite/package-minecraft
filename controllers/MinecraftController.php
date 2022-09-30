@@ -55,9 +55,9 @@ class MinecraftController extends CoreController
     #[Link("/servers/add", Link::POST, [], "/cmw-admin/minecraft")]
     public function adminServersAdd(): void
     {
-        [$name, $ip, $port] = Utils::filterInput("name", "ip", "port");
+        [$name, $ip, $status, $port] = Utils::filterInput("name", "ip", "status", "port");
 
-        $this->minecraftModel->addServer($name, $ip, ($port === "" ? null : $port));
+        $this->minecraftModel->addServer($name, $ip, $status, ($port === "" ? null : $port));
 
         header("Location: ../servers");
     }
@@ -65,9 +65,9 @@ class MinecraftController extends CoreController
     #[Link("/servers", Link::POST, [], "/cmw-admin/minecraft")]
     public function adminServersEdit(): void
     {
-        [$id, $name, $ip, $port] = Utils::filterInput("serverId", "name", "ip", "port");
+        [$id, $name, $ip, $status, $port] = Utils::filterInput("serverId", "name", "ip", "status", "port");
 
-        $this->minecraftModel->updateServer($id, $name, $ip, ($port === "" ? null : $port));
+        $this->minecraftModel->updateServer($id, $name, $ip, $status, ($port === "" ? null : $port));
 
         header("Location: servers");
     }

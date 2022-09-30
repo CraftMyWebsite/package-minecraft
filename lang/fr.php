@@ -17,6 +17,12 @@ return [
             ],
         ],
         "add" => "Ajouter un serveur",
+        "status" => [
+            "title" => "Status du serveur",
+            "maintenance" => "Maintenance",
+            "offline" => "Hors-Ligne",
+            "online" => "En ligne",
+        ],
     ],
 
 ];
