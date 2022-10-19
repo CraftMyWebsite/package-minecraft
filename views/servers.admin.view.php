@@ -3,6 +3,7 @@
 use CMW\Controller\Minecraft\MinecraftController;
 use CMW\Entity\Minecraft\MinecraftServerEntity;
 use CMW\Manager\Lang\LangManager;
+use CMW\Utils\SecurityService;
 
 $title = LangManager::translate("minecraft.servers.title");
 $description = LangManager::translate("minecraft.servers.desc");
@@ -54,6 +55,7 @@ $description = LangManager::translate("minecraft.servers.desc");
                                          data-parent="#accordion">
                                         <div class="card-body">
                                             <form action="" method="post">
+                                                <?php (new SecurityService())->insertHiddenToken() ?>
 
                                                 <input type="text" name="serverId" value="<?= $server->getServerId() ?>"
                                                        hidden>
@@ -174,6 +176,7 @@ $description = LangManager::translate("minecraft.servers.desc");
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" action="servers/add">
+            <?php (new SecurityService())->insertHiddenToken() ?>
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
