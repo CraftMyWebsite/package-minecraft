@@ -41,7 +41,7 @@ $description = LangManager::translate("minecraft.servers.desc");
                                                 <?= $server->getServerName() ?>
 
                                                 <span class="badge badge-<?= ($server->getServerStatus() === -1) ? 'warning' :
-                                                                             (($server->getServerStatus() === 0) ? 'danger' : 'success') ?>">
+                                                    (($server->getServerStatus() === 0) ? 'danger' : 'success') ?>">
                                                 </span>
 
                                                 <small class="float-right">
@@ -60,34 +60,59 @@ $description = LangManager::translate("minecraft.servers.desc");
                                                 <input type="text" name="serverId" value="<?= $server->getServerId() ?>"
                                                        hidden>
 
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
+                                                <div class="input-form mb-3">
+                                                    <label for="cmwlPort"><?= LangManager::translate("minecraft.servers.modal.add.name") ?></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
                                                             <span class="input-group-text"><i
                                                                         class="fas fa-heading"></i></span>
+                                                        </div>
+                                                        <input type="text" name="name" class="form-control"
+                                                               placeholder="CraftMySkyBlock"
+                                                               value="<?= $server->getServerName() ?>"
+                                                               required>
                                                     </div>
-                                                    <input type="text" name="name" class="form-control"
-                                                           placeholder="CraftMySkyBlock"
-                                                           value="<?= $server->getServerName() ?>"
-                                                           required>
                                                 </div>
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
+                                                <div class="input-form mb-3">
+                                                    <label for="cmwlPort"><?= LangManager::translate("minecraft.servers.modal.add.ip") ?></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
                                                             <span class="input-group-text"><i
                                                                         class="fas fa-at"></i></span>
+                                                        </div>
+                                                        <input type="text" name="ip" class="form-control"
+                                                               placeholder="mc.craftmywebsite.fr"
+                                                               value="<?= $server->getServerIp() ?>"
+                                                               required>
                                                     </div>
-                                                    <input type="text" name="ip" class="form-control"
-                                                           placeholder="mc.craftmywebsite.fr"
-                                                           value="<?= $server->getServerIp() ?>"
-                                                           required>
                                                 </div>
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
+                                                <div class="input-form mb-3">
+                                                    <label for="cmwlPort"><?= LangManager::translate("minecraft.servers.modal.add.port") ?></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
                                                             <span class="input-group-text"><i
                                                                         class="fas fa-flag"></i></span>
+                                                        </div>
+                                                        <input type="number" name="port" id="port" class="form-control"
+                                                               placeholder="25565"
+                                                               value="<?= $server->getServerPort() ?>">
                                                     </div>
-                                                    <input type="number" name="port" id="port" class="form-control"
-                                                           placeholder="25565"
-                                                           value="<?= $server->getServerPort() ?>">
+                                                </div>
+
+                                                <div class="input-form mb-3">
+                                                    <label for="cmwlPort"><?= LangManager::translate("minecraft.servers.modal.add.cmwl_port") ?></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i
+                                                                        class="fas fa-flag"></i></span>
+                                                        </div>
+                                                        <input type="number" name="cmwlPort" id="cmwlPort"
+                                                               class="form-control"
+                                                               placeholder="24102"
+                                                               value="<?= $server->getServerCMWLPort() ?>">
+
+                                                    </div>
+                                                    <small><?= LangManager::translate("minecraft.servers.hint_cmwl_port") ?></small>
                                                 </div>
 
                                                 <div class="form-group">
@@ -107,10 +132,15 @@ $description = LangManager::translate("minecraft.servers.desc");
                                                     </select>
                                                 </div>
 
-                                                <input type="submit"
-                                                       value="<?= LangManager::translate('core.btn.save') ?>"
-                                                       class="btn btn-primary float-right">
+                                                <div class="float-right">
+                                                    <button onclick="checkCMWLConfig(<?= $server->getServerId() ?>)" type="button" class="btn btn-primary mr-5">
+                                                        <?= LangManager::translate('minecraft.servers.test_cmwl') ?>
+                                                    </button>
 
+                                                    <input type="submit"
+                                                           value="<?= LangManager::translate('core.btn.save') ?>"
+                                                           class="btn btn-primary">
+                                                </div>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
                                                         data-target="#serverDel<?= $server->getServerId() ?>">
                                                     <i class="fas fa-trash-alt"></i>
@@ -196,7 +226,7 @@ $description = LangManager::translate("minecraft.servers.desc");
                                 <span class="input-group-text"><i class="fa fa-heading"></i></span>
                             </div>
                             <input type="text" name="name" class="form-control"
-                                   placeholder="CraftMySkybLOCK" required>
+                                   placeholder="CraftMySkyBlock" required>
                         </div>
                     </div>
 
@@ -223,9 +253,23 @@ $description = LangManager::translate("minecraft.servers.desc");
                     </div>
 
                     <div class="form-group">
+                        <label for="cmwlPort"><?= LangManager::translate("minecraft.servers.modal.add.cmwl_port") ?></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-flag"></i></span>
+                            </div>
+                            <input type="number" name="cmwlPort" class="form-control"
+                                   placeholder="24102" minlength="1" maxlength="5">
+                        </div>
+                        <small><?= LangManager::translate("minecraft.servers.hint_cmwl_port") ?></small>
+                    </div>
+
+                    <div class="form-group">
                         <label for="status"><?= LangManager::translate("minecraft.servers.status.title") ?></label>
                         <select name="status" id="status" class="form-control">
-                            <option value="-1" selected><?= LangManager::translate("minecraft.servers.status.maintenance") ?></option>
+                            <option value="-1" selected>
+                                <?= LangManager::translate("minecraft.servers.status.maintenance") ?>
+                            </option>
                             <option value="0"><?= LangManager::translate("minecraft.servers.status.offline") ?></option>
                             <option value="1"><?= LangManager::translate("minecraft.servers.status.online") ?></option>
                         </select>
@@ -234,12 +278,10 @@ $description = LangManager::translate("minecraft.servers.desc");
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit"
-                            class="btn btn-success">
+                    <button type="submit" class="btn btn-success">
                         <?= LangManager::translate("core.btn.save") ?>
                     </button>
-                    <button type="button" class="btn btn-secondary"
-                            data-dismiss="modal">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         <?= LangManager::translate("core.btn.close") ?>
                     </button>
                 </div>

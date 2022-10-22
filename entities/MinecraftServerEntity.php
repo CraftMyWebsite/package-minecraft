@@ -9,6 +9,7 @@ class MinecraftServerEntity
     private string $serverName;
     private string $serverIp;
     private ?int $serverPort;
+    private ?int $serverCMWLPort;
     private string $serverLastUpdate;
     private int $serverStatus;
 
@@ -17,15 +18,17 @@ class MinecraftServerEntity
      * @param string $serverName
      * @param string $serverIp
      * @param int|null $serverPort
+     * @param int|null $serverCMWLPort
      * @param string $serverLastUpdate
      * @param int $serverStatus
      */
-    public function __construct(int $serverId, string $serverName, string $serverIp, ?int $serverPort, string $serverLastUpdate, int $serverStatus)
+    public function __construct(int $serverId, string $serverName, string $serverIp, ?int $serverPort, ?int $serverCMWLPort, string $serverLastUpdate, int $serverStatus)
     {
         $this->serverId = $serverId;
         $this->serverName = $serverName;
         $this->serverIp = $serverIp;
         $this->serverPort = $serverPort;
+        $this->serverCMWLPort = $serverCMWLPort;
         $this->serverLastUpdate = $serverLastUpdate;
         $this->serverStatus = $serverStatus;
     }
@@ -60,6 +63,14 @@ class MinecraftServerEntity
     public function getServerPort(): ?int
     {
         return ($this->serverPort ?? 25565);
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getServerCMWLPort(): ?int
+    {
+        return $this->serverCMWLPort ?? $this->serverPort;
     }
 
     /**

@@ -4,6 +4,8 @@ namespace xPaw;
 
 use CMW\Entity\Minecraft\MinecraftPingEntity;
 use CMW\Entity\Minecraft\MinecraftPingPlayersEntity;
+use PHPMailer\PHPMailer\Exception;
+use Throwable;
 
 class MinecraftPing
 {
@@ -62,7 +64,7 @@ class MinecraftPing
     public function Connect()
     {
 
-        $this->Socket = @\fsockopen($this->ServerAddress, $this->ServerPort, $errno, $errstr, (float)$this->Timeout);
+        $this->Socket = @fsockopen($this->ServerAddress, $this->ServerPort, $errno, $errstr, (float)$this->Timeout);
 
         if (!$this->Socket) {
             $this->Socket = null;

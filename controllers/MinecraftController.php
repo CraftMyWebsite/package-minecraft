@@ -3,11 +3,16 @@
 namespace CMW\Controller\Minecraft;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Votes\VotesController;
 use CMW\Entity\Minecraft\MinecraftPingEntity;
+use CMW\Manager\Api\APIManager;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Router\Link;
+use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
+use JsonException;
 use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
 
@@ -32,54 +37,28 @@ class MinecraftController extends CoreController
         $this->minecraftModel = new MinecraftModel();
     }
 
-    #[Link("/servers/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
-    public function adminServersDelete(int $id): void
+    public static function pingServerOld(string $host, ?int $port = 25565)
     {
-        $this->minecraftModel->deleteServer($id);
+        try {
+            $query = new MinecraftPing($host, $port, 2);
 
-        header("Location: ../../servers");
+            return $query->QueryOldPre17();
+        } catch (MinecraftPingException $e) {
+            echo $e->getMessage();
+        } finally {
+            $query?->Close();
+        }
+        return null;
     }
 
-    #[Link(path: "/minecraft", method: Link::GET, scope: "/cmw-admin")]
-    #[Link("/servers", Link::GET, [], "/cmw-admin/minecraft")]
-    public function adminServers(): void
+    public static function getTotalPlayersOnlines(): int
     {
-
-        $servers = $this->minecraftModel->getServers();
-
-        View::createAdminView("minecraft", "servers")
-            ->addVariableList(["servers" => $servers])
-            ->view();
+        $toReturn = 0;
+        foreach ((new MinecraftModel())->getServers() as $server) {
+            $toReturn += self::pingServer($server->getServerIp(), $server->getServerPort())?->getPlayersOnline();
+        }
+        return $toReturn;
     }
-
-    #[Link("/servers/add", Link::POST, [], "/cmw-admin/minecraft")]
-    public function adminServersAdd(): void
-    {
-        [$name, $ip, $status, $port] = Utils::filterInput("name", "ip", "status", "port");
-
-        $this->minecraftModel->addServer($name, $ip, $status, ($port === "" ? null : $port));
-
-        header("Location: ../servers");
-    }
-
-    #[Link("/servers", Link::POST, [], "/cmw-admin/minecraft")]
-    public function adminServersEdit(): void
-    {
-        [$id, $name, $ip, $status, $port] = Utils::filterInput("serverId", "name", "ip", "status", "port");
-
-        $this->minecraftModel->updateServer($id, $name, $ip, $status, ($port === "" ? null : $port));
-
-        header("Location: servers");
-    }
-
-
-
-    /*
-     *
-     * TOOLS FUNCTIONS
-     *
-     */
-
 
     /**
      * @param string $host
@@ -101,28 +80,89 @@ class MinecraftController extends CoreController
         return null;
     }
 
-    public static function pingServerOld(string $host, ?int $port = 25565)
+    #[Link("/servers/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
+    public function adminServersDelete(int $id): void
     {
-        try {
-            $query = new MinecraftPing($host, $port, 2);
+        $this->minecraftModel->deleteServer($id);
 
-            return $query->QueryOldPre17();
-        } catch (MinecraftPingException $e) {
-            echo $e->getMessage();
-        } finally {
-            $query?->Close();
-        }
-        return null;
+        header("Location: ../../servers");
+    }
+
+
+    /*
+     *
+     * TOOLS FUNCTIONS
+     *
+     */
+
+    #[Link(path: "/minecraft", method: Link::GET, scope: "/cmw-admin")]
+    #[Link("/servers", Link::GET, [], "/cmw-admin/minecraft")]
+    public function adminServers(): void
+    {
+        $servers = $this->minecraftModel->getServers();
+
+        View::createAdminView("minecraft", "servers")
+            ->addVariableList(["servers" => $servers])
+            ->addScriptBefore("app/package/minecraft/views/resources/js/main.js")
+            ->view();
+    }
+
+    #[Link("/servers/add", Link::POST, [], "/cmw-admin/minecraft")]
+    public function adminServersAdd(): void
+    {
+        [$name, $ip, $status, $port, $cmwlPort] = Utils::filterInput("name", "ip", "status", "port", "cmwlPort");
+
+        $this->minecraftModel->addServer($name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
+
+        header("Location: ../servers");
     }
 
     //TODO Try to optimize that
-    public static function getTotalPlayersOnlines(): int
+
+    #[Link("/servers", Link::POST, [], "/cmw-admin/minecraft")]
+    public function adminServersEdit(): void
     {
-        $toReturn = 0;
-        foreach ((new MinecraftModel())->getServers() as $server){
-            $toReturn += self::pingServer($server->getServerIp(), $server->getServerPort())?->getPlayersOnline();
+        [$id, $name, $ip, $status, $port, $cmwlPort] = Utils::filterInput("serverId", "name", "ip", "status", "port", "cmwlPort");
+
+        $this->minecraftModel->updateServer($id, $name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
+
+        header("Location: servers");
+    }
+
+    #[Link("/servers/cmwl/test/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
+    public function checkCmwLConfig(int $serverId): void
+    {
+        try {
+            $result = json_decode(@APIManager::getRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}"), true, 512, JSON_THROW_ON_ERROR);
+            if ((int)$result['CODE'] === 200) {
+                try {
+                    print(json_encode("true", JSON_THROW_ON_ERROR));
+                    Response::sendAlert("success", "", LangManager::translate('minecraft.servers.test_cmw_response'));
+                } catch (JsonException) {
+                }
+            } else {
+                try {
+                    print(json_encode("false", JSON_THROW_ON_ERROR));
+                } catch (JsonException) {
+                }
+            }
+        } catch (JsonException) {
         }
-        return $toReturn;
+    }
+
+    #[Link("/servers/list/", Link::GET, [], "/cmw-admin/minecraft")]
+    public function getServersIdAndName(): void
+    {
+        $toReturn = [];
+
+        foreach ($this->minecraftModel->getServers() as $server) {
+            $toReturn[$server->getServerId()][] = $server->getServerName();
+        }
+
+        try {
+            print (json_encode($toReturn, JSON_THROW_ON_ERROR));
+        } catch (JsonException) {
+        }
     }
 
 
