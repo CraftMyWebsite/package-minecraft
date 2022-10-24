@@ -42,11 +42,11 @@ class MinecraftController extends CoreController
         try {
             $query = new MinecraftPing($host, $port, 2);
 
-            return $query->QueryOldPre17();
+            return $query->queryOldPre17();
         } catch (MinecraftPingException $e) {
             echo $e->getMessage();
         } finally {
-            $query?->Close();
+            $query?->close();
         }
         return null;
     }
@@ -71,11 +71,16 @@ class MinecraftController extends CoreController
         try {
             $query = new MinecraftPing($host, $port, 2);
 
-            return $query->Query();
+            if($query->connect()){
+                return $query->query();
+            } else {
+                return null;
+            }
+
         } catch (MinecraftPingException $e) {
             echo $e->getMessage();
         } finally {
-            $query?->Close();
+            $query?->close();
         }
         return null;
     }
