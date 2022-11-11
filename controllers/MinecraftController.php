@@ -104,6 +104,8 @@ class MinecraftController extends CoreController
     #[Link("/servers", Link::GET, [], "/cmw-admin/minecraft")]
     public function adminServers(): void
     {
+        $this->sendFirstKeyRequest(14);
+
         $servers = $this->minecraftModel->getServers();
 
         View::createAdminView("minecraft", "servers")
@@ -117,7 +119,11 @@ class MinecraftController extends CoreController
     {
         [$name, $ip, $status, $port, $cmwlPort] = Utils::filterInput("name", "ip", "status", "port", "cmwlPort");
 
-        $this->minecraftModel->addServer($name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
+        $server = $this->minecraftModel->addServer($name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
+
+        if(!empty($cmwlPort)){
+            $this->sendFirstKeyRequest($server?->getServerId());
+        }
 
         header("Location: ../servers");
     }
@@ -168,6 +174,51 @@ class MinecraftController extends CoreController
             print (json_encode($toReturn, JSON_THROW_ON_ERROR));
         } catch (JsonException) {
         }
+    }
+
+    /**
+     * @param int $serverId
+     * @return void
+     * @desc Send the first key request to instanciate the connexion between server and website.
+     */
+    private function sendFirstKeyRequest(int $serverId): void
+    {
+        try {
+            $res = @APIManager::postRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}/core/generate/firstKey",
+                ["key" => $this->generateCmwLinkPrivateKey(), "domain" => $_SERVER['HTTP_HOST']]);
+
+            $code = json_decode($res, JSON_THROW_ON_ERROR, 512, JSON_THROW_ON_ERROR)['CODE'];
+
+            // TODO TOASTERS WITH ERRORS
+            switch ($code){
+                case "200":
+                    //good
+                    break;
+                case "401":
+                    // header pas bon ou ip pas bon (non-authorized)
+                    break;
+                case "404":
+                    // Route non trouvé
+                    break;
+                case "418":
+                    // Erreur interne
+                    break;
+                default:
+                    // Erreur non identifié
+                    break;
+            }
+
+        } catch (JsonException) {
+        }
+    }
+
+    /**
+     * @return string
+     * @desc Generate unique private key for your cmw link plugin (base64 encoded for better url support)
+     */
+    private function generateCmwLinkPrivateKey(): string
+    {
+        return base64_encode(password_hash(Utils::genId(15) . uniqid('', true), PASSWORD_BCRYPT));
     }
 
 
