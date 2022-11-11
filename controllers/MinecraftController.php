@@ -104,8 +104,6 @@ class MinecraftController extends CoreController
     #[Link("/servers", Link::GET, [], "/cmw-admin/minecraft")]
     public function adminServers(): void
     {
-        $this->sendFirstKeyRequest(14);
-
         $servers = $this->minecraftModel->getServers();
 
         View::createAdminView("minecraft", "servers")
