@@ -3,11 +3,13 @@
 namespace CMW\Controller\Minecraft;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Users\UsersController;
 use CMW\Controller\Votes\VotesController;
 use CMW\Entity\Minecraft\MinecraftPingEntity;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Minecraft\MinecraftModel;
+use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
@@ -85,12 +87,16 @@ class MinecraftController extends CoreController
         return null;
     }
 
-    #[Link("/servers/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
-    public function adminServersDelete(int $id): void
+    #[Link("/servers/delete", Link::POST, [], "/cmw-admin/minecraft")]
+    public function adminServersDelete(): void
     {
-        $this->minecraftModel->deleteServer($id);
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.delete");
 
-        header("Location: ../../servers");
+        $this->minecraftModel->deleteServer(filter_input(INPUT_POST, "serverId"));
+
+        Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_delete'), true);
+
+        header("Location: ../../minecraft/servers");
     }
 
 
@@ -104,6 +110,8 @@ class MinecraftController extends CoreController
     #[Link("/servers", Link::GET, [], "/cmw-admin/minecraft")]
     public function adminServers(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.list");
+
         $servers = $this->minecraftModel->getServers();
 
         View::createAdminView("minecraft", "servers")
@@ -115,6 +123,8 @@ class MinecraftController extends CoreController
     #[Link("/servers/add", Link::POST, [], "/cmw-admin/minecraft")]
     public function adminServersAdd(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.add");
+
         [$name, $ip, $status, $port, $cmwlPort] = Utils::filterInput("name", "ip", "status", "port", "cmwlPort");
 
         $server = $this->minecraftModel->addServer($name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
@@ -122,6 +132,8 @@ class MinecraftController extends CoreController
         if(!empty($cmwlPort)){
             $this->sendFirstKeyRequest($server?->getServerId());
         }
+
+        Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_add'), true);
 
         header("Location: ../servers");
     }
@@ -131,9 +143,13 @@ class MinecraftController extends CoreController
     #[Link("/servers", Link::POST, [], "/cmw-admin/minecraft")]
     public function adminServersEdit(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.edit");
+
         [$id, $name, $ip, $status, $port, $cmwlPort] = Utils::filterInput("serverId", "name", "ip", "status", "port", "cmwlPort");
 
         $this->minecraftModel->updateServer($id, $name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
+
+        Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_edit'), true);
 
         header("Location: servers");
     }
@@ -141,17 +157,20 @@ class MinecraftController extends CoreController
     #[Link("/servers/cmwl/test/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
     public function checkCmwLConfig(int $serverId): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.edit");
+
         try {
             $result = json_decode(@APIManager::getRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}"), true, 512, JSON_THROW_ON_ERROR);
             if ((int)$result['CODE'] === 200) {
                 try {
                     print(json_encode("true", JSON_THROW_ON_ERROR));
-                    Response::sendAlert("success", "", LangManager::translate('minecraft.servers.test_cmw_response'));
+                    Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.test_cmw_response_success'), true);
                 } catch (JsonException) {
                 }
             } else {
                 try {
                     print(json_encode("false", JSON_THROW_ON_ERROR));
+                    Response::sendAlert("error", "", LangManager::translate('minecraft.servers.toasters.test_cmw_response_error'), true);
                 } catch (JsonException) {
                 }
             }
@@ -162,6 +181,8 @@ class MinecraftController extends CoreController
     #[Link("/servers/list/", Link::GET, [], "/cmw-admin/minecraft")]
     public function getServersIdAndName(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.list");
+
         $toReturn = [];
 
         foreach ($this->minecraftModel->getServers() as $server) {

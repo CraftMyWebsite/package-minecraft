@@ -133,7 +133,8 @@ $description = LangManager::translate("minecraft.servers.desc");
                                                 </div>
 
                                                 <div class="float-right">
-                                                    <button onclick="checkCMWLConfig(<?= $server->getServerId() ?>)" type="button" class="btn btn-primary mr-5">
+                                                    <button onclick="checkCMWLConfig(<?= $server->getServerId() ?>)"
+                                                            type="button" class="btn btn-primary mr-5">
                                                         <?= LangManager::translate('minecraft.servers.test_cmwl') ?>
                                                     </button>
 
@@ -145,48 +146,51 @@ $description = LangManager::translate("minecraft.servers.desc");
                                                         data-target="#serverDel<?= $server->getServerId() ?>">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
-
-
-                                                <!-- Modal Delete verif -->
-                                                <div class="modal fade" id="serverDel<?= $server->getServerId() ?>"
-                                                     tabindex="-1" role="dialog"
-                                                     aria-labelledby="serverDelLabel<?= $server->getServerId() ?>"
-                                                     aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">
-                                                                    <?= LangManager::translate("minecraft.servers.modal.delete.title") ?>
-                                                                    <strong><?= $server->getServerName() ?></strong>
-                                                                </h5>
-                                                                <button type="button" class="close"
-                                                                        data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <?= LangManager::translate("minecraft.servers.modal.delete.body") ?>
-                                                            </div>
-
-                                                            <div class="modal-footer">
-                                                                <a href="servers/delete/<?= $server->getServerId() ?>"
-                                                                   class="btn btn-danger">
-                                                                    <?= LangManager::translate("core.btn.delete") ?>
-                                                                </a>
-                                                                <button type="button" class="btn btn-secondary"
-                                                                        data-dismiss="modal">
-                                                                    <?= LangManager::translate("core.btn.close") ?>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
                                             </form>
                                         </div>
                                     </div>
                                 </div>
+
+
+                                <!-- Modal Delete verif -->
+                                <div class="modal fade" id="serverDel<?= $server->getServerId() ?>"
+                                     tabindex="-1" role="dialog"
+                                     aria-labelledby="serverDelLabel<?= $server->getServerId() ?>"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">
+                                                    <?= LangManager::translate("minecraft.servers.modal.delete.title") ?>
+                                                    <strong><?= $server->getServerName() ?></strong>
+                                                </h5>
+                                                <button type="button" class="close"
+                                                        data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <?= LangManager::translate("minecraft.servers.modal.delete.body") ?>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <form method="post" action="servers/delete">
+                                                    <?php (new SecurityService())->insertHiddenToken() ?>
+                                                    <input type="hidden" name="serverId"
+                                                           value="<?= $server->getServerId() ?>">
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <?= LangManager::translate("core.btn.delete") ?>
+                                                    </button>
+                                                </form>
+                                                <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">
+                                                    <?= LangManager::translate("core.btn.close") ?>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             <?php endforeach; ?>
 
                         </div>
