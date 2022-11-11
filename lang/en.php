@@ -32,6 +32,13 @@ return [
             "delete_server" => "Server deleted",
             "server_add" => "Server added !",
             "server_edit" => "Server edited !",
+            "cmwl_first_install" => [
+                "200" => "CMW Link config with success",
+                "401" => "Non-authorized connexion",
+                "404" => "Url not found",
+                "418" => "Internal error",
+                "other" => "Undefined error",
+            ],
         ]
     ],
 

@@ -32,7 +32,14 @@ return [
             "server_delete" => "Serveur supprimé !",
             "server_add" => "Serveur ajouté !",
             "server_edit" => "Serveur modifié !",
-        ]
+            "cmwl_first_install" => [
+                "200" => "Configuration de CMW Link réussie",
+                "401" => "Connexion non autorisée",
+                "404" => "Route non trouvée",
+                "418" => "Erreur interne",
+                "other" => "Erreur non identifiée",
+            ],
+        ],
     ],
 
 ];

@@ -198,7 +198,7 @@ class MinecraftController extends CoreController
     /**
      * @param int $serverId
      * @return void
-     * @desc Send the first key request to instanciate the connexion between server and website.
+     * @desc Send the first key request to instantiate the connexion between server and website.
      */
     private function sendFirstKeyRequest(int $serverId): void
     {
@@ -208,26 +208,32 @@ class MinecraftController extends CoreController
 
             $code = json_decode($res, JSON_THROW_ON_ERROR, 512, JSON_THROW_ON_ERROR)['CODE'];
 
-            // TODO TOASTERS WITH ERRORS
             switch ($code){
                 case "200":
-                    //good
+                    // Success
+                    Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.200'), true);
                     break;
                 case "401":
-                    // header pas bon ou ip pas bon (non-authorized)
+                    // Non-Authorized
+                    Response::sendAlert("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.401'), true);
                     break;
                 case "404":
-                    // Route non trouvé
+                    // Undefined url
+                    Response::sendAlert("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.404'), true);
                     break;
                 case "418":
-                    // Erreur interne
+                    // Internal error
+                    Response::sendAlert("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.418'), true);
                     break;
                 default:
-                    // Erreur non identifié
+                    // Undefined error
+                    Response::sendAlert("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.other'), true);
                     break;
             }
 
-        } catch (JsonException) {
+        } catch (JsonException $e) {
+            Response::sendAlert("error", "", $e->getMessage(), true);
+            return;
         }
     }
 
