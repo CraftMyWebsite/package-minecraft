@@ -6,6 +6,7 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
 use CMW\Controller\Votes\VotesController;
 use CMW\Entity\Minecraft\MinecraftPingEntity;
+use CMW\Entity\Minecraft\MinecraftPingPlayersEntity;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Minecraft\MinecraftModel;
@@ -73,13 +74,22 @@ class MinecraftController extends CoreController
         try {
             $query = new MinecraftPing($host, $port, 2);
 
-            if($query->connect()){
+            if ($query->connect()) {
                 return $query->query();
-            } else {
-                return null;
             }
 
-        } catch (MinecraftPingException $e) {
+            /* If we can't reach the server, we return an empty MinecraftPingEntity */
+            $playersEntity[] = new MinecraftPingPlayersEntity("None", 0);
+            return new MinecraftPingEntity(
+                null,
+                null,
+                0,
+                0,
+                $playersEntity,
+                null
+            );
+
+        } catch (MinecraftPingException|JsonException $e) {
             echo $e->getMessage();
         } finally {
             $query?->close();
@@ -129,7 +139,7 @@ class MinecraftController extends CoreController
 
         $server = $this->minecraftModel->addServer($name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
 
-        if(!empty($cmwlPort)){
+        if (!empty($cmwlPort)) {
             $this->sendFirstKeyRequest($server?->getServerId());
         }
 
@@ -208,7 +218,7 @@ class MinecraftController extends CoreController
 
             $code = json_decode($res, JSON_THROW_ON_ERROR, 512, JSON_THROW_ON_ERROR)['CODE'];
 
-            switch ($code){
+            switch ($code) {
                 case "200":
                     // Success
                     Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.200'), true);

@@ -4,6 +4,7 @@ namespace xPaw;
 
 use CMW\Entity\Minecraft\MinecraftPingEntity;
 use CMW\Entity\Minecraft\MinecraftPingPlayersEntity;
+use ErrorException;
 use Exception;
 use function dns_get_record;
 use function explode;
@@ -77,11 +78,14 @@ class MinecraftPing
     /**
      * @return bool
      * @throws \xPaw\MinecraftPingException
-     * @Todo When we can't connect the socket, return 0
      */
     public function connect(): bool
     {
-        $this->socket = (@fsockopen($this->serverAddress, $this->serverPort, $errno, $errstr, (float)$this->timeout));
+        try {
+            $this->socket = @fsockopen($this->serverAddress, $this->serverPort, $errno, $errstr, (float)$this->timeout);
+        } catch (Exception) {
+            return false;
+        }
 
         if($this->socket === false){
             return false;
