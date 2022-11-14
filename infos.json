@@ -2,10 +2,10 @@
   "name": "Minecraft",
   "menus": [
     {
-      "name_menu": "Minecraft",
+      "name_menu_fr": "Minecraft",
       "icon_menu": "fas fa-cube",
       "url_menu": "",
-      "urls_submenu": {
+      "urls_submenu_fr": {
         "Configuration": "minecraft/settings",
         "Serveurs": "minecraft/servers"
       },
@@ -15,7 +15,17 @@
       }
     }
   ],
-  "description": "Connectez votre site à votre serveur Minecraft",
+
+  "description": [
+    {
+      "fr": "Connectez votre site à vos serveurs Minecraft",
+      "en": "Connect to your Minecraft serveurs"
+    }
+  ],
+
   "version": "1.0.0",
-  "author": "CraftMyWebsite Team"
+  "author": "CraftMyWebsite Team",
+
+  "isGame": false,
+  "isCore": true
 }
