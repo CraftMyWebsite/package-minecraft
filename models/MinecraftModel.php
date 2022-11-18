@@ -17,8 +17,8 @@ class MinecraftModel extends DatabaseManager
 
     public function getServerById(int $id): ?MinecraftServerEntity
     {
-        $sql = "SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, minecraft_server_cmwl_port,
-                 minecraft_server_status, DATE_FORMAT(minecraft_server_last_update, '%d/%m/%Y à %H:%i:%s') AS 'minecraft_server_last_update' 
+        $sql = "SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, 
+                minecraft_server_cmwl_port, minecraft_server_status, minecraft_server_last_update 
                 FROM cmw_minecraft_servers WHERE minecraft_server_id = :server_id";
 
         $db = self::getInstance();
