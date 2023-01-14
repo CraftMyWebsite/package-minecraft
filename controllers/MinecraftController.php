@@ -127,6 +127,9 @@ class MinecraftController extends CoreController
         View::createAdminView("minecraft", "servers")
             ->addVariableList(["servers" => $servers])
             ->addScriptBefore("app/package/minecraft/views/resources/js/main.js")
+            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
+            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js",
+                "admin/resources/assets/js/pages/simple-datatables.js")
             ->view();
     }
 
