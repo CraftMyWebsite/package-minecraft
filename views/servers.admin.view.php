@@ -127,7 +127,7 @@ $description = LangManager::translate("minecraft.servers.desc");
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header bg-primary">
-                                        <h5 class="modal-title white" id="myModalLabel160">Edition de <?= $server->getServerName() ?></h5>
+                                        <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("minecraft.servers.modal.editing") ?> <?= $server->getServerName() ?></h5>
                                     </div>
                                     <div class="modal-body">
                                         <form id="serveredit-<?= $server->getServerId() ?>" method="post" action="">
@@ -202,10 +202,10 @@ $description = LangManager::translate("minecraft.servers.desc");
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header bg-danger">
-                                        <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("minecraft.servers.modal.delete.title") ?> <?= $server->getServerName() ?></h5>
+                                        <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("minecraft.servers.modal.delete") ?> <?= $server->getServerName() ?></h5>
                                     </div>
                                     <div class="modal-body">
-                                        <?= LangManager::translate("minecraft.servers.modal.delete.body") ?>
+                                        <?= LangManager::translate("minecraft.servers.modal.deletealert") ?>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
