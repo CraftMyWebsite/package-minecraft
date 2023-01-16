@@ -5,10 +5,9 @@ return [
         "title" => "Gérez vos serveurs",
         "desc" => "Gérez vos serveurs Minecraft",
         "modal" => [
-            "delete" => [
-                "title" => "Suppression de votre serveur ",
-                "body" => "La suppression de votre serveur est définitive"
-            ],
+            "editing" => "Édition de :",
+            "delete" => "Supression de :",
+            "deletealert" => "La suppression de votre serveur est définitive",
             "add" => [
                 "title" => "Ajouter un nouveau serveur",
                 "name" => "Nom de votre serveur",

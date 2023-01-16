@@ -5,10 +5,9 @@ return [
         "title" => "Manage your servers",
         "desc" => "Manage your minecraftservers",
         "modal" => [
-            "delete" => [
-                "title" => "Delete your server ",
-                "body" => "The delete is permanent"
-            ],
+            "editing" => "Editing :",
+            "delete" => "Delete :",
+            "deletealert" => "Deleting your server is permanent",
             "add" => [
                 "title" => "Add a new server",
                 "name" => "Server name",
