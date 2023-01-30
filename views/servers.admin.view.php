@@ -3,7 +3,7 @@
 use CMW\Controller\Minecraft\MinecraftController;
 use CMW\Entity\Minecraft\MinecraftServerEntity;
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 $title = LangManager::translate("minecraft.servers.title");
 $description = LangManager::translate("minecraft.servers.desc");
@@ -24,7 +24,7 @@ $description = LangManager::translate("minecraft.servers.desc");
             </div>
             <div class="card-body">
                 <form method="post" action="servers/add">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                             <h6><?= LangManager::translate("minecraft.servers.modal.add.name") ?> :</h6>
                             <div class="form-group position-relative has-icon-left">
                                 <input type="text" class="form-control" name="name" required
@@ -131,7 +131,7 @@ $description = LangManager::translate("minecraft.servers.desc");
                                     </div>
                                     <div class="modal-body">
                                         <form id="serveredit-<?= $server->getServerId() ?>" method="post" action="">
-                                            <?php (new SecurityService())->insertHiddenToken() ?>
+                                            <?php (new SecurityManager())->insertHiddenToken() ?>
                                                 <input type="text" name="serverId" value="<?= $server->getServerId() ?>" hidden>
                                             <h6><?= LangManager::translate("minecraft.servers.modal.add.name") ?> :</h6>
                                             <div class="form-group position-relative has-icon-left">
@@ -213,7 +213,7 @@ $description = LangManager::translate("minecraft.servers.desc");
                                             <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
                                         </button>
                                             <form method="post" action="servers/delete">
-                                            <?php (new SecurityService())->insertHiddenToken() ?>
+                                            <?php (new SecurityManager())->insertHiddenToken() ?>
                                                 <input type="hidden" name="serverId" value="<?= $server->getServerId() ?>">
                                                 <button type="submit" class="btn btn-danger ml-1" data-bs-dismiss="modal">
                                                     <i class="bx bx-check d-block d-sm-none"></i>
