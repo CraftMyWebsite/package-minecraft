@@ -18,6 +18,7 @@ return [
         ],
         "list" => [
             "title" => "List of your servers",
+            "fav" => "Favorite",
             "name" => "Name",
             "players" => "Online Players",
             "ip" => "IP : PORT",
@@ -40,6 +41,7 @@ return [
             "delete_server" => "Server deleted",
             "server_add" => "Server added !",
             "server_edit" => "Server edited !",
+            "server_fav" => "Fav defined",
             "cmwl_first_install" => [
                 "200" => "CMW Link config with success",
                 "401" => "Non-authorized connexion",

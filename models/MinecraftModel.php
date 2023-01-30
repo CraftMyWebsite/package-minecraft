@@ -15,33 +15,6 @@ use CMW\Manager\Database\DatabaseManager;
 class MinecraftModel extends DatabaseManager
 {
 
-    public function getServerById(int $id): ?MinecraftServerEntity
-    {
-        $sql = "SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, 
-                minecraft_server_cmwl_port, minecraft_server_status, minecraft_server_last_update 
-                FROM cmw_minecraft_servers WHERE minecraft_server_id = :server_id";
-
-        $db = self::getInstance();
-
-        $res = $db->prepare($sql);
-
-        if (!$res->execute(array("server_id" => $id))) {
-            return null;
-        }
-
-        $res = $res->fetch();
-
-        return new MinecraftServerEntity(
-            $res['minecraft_server_id'],
-            $res['minecraft_server_name'],
-            $res['minecraft_server_ip'],
-            $res['minecraft_server_port'] ?? null,
-            $res['minecraft_server_cmwl_port'] ?? null,
-            $res['minecraft_server_last_update'],
-            $res['minecraft_server_status']
-        );
-    }
-
     /**
      * @return MinecraftServerEntity[] array
      */
@@ -61,6 +34,34 @@ class MinecraftModel extends DatabaseManager
             $toReturn[] = $this->getServerById($server['minecraft_server_id']);
         }
         return $toReturn;
+    }
+
+    public function getServerById(int $id): ?MinecraftServerEntity
+    {
+        $sql = "SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, 
+                minecraft_server_cmwl_port, minecraft_server_status, minecraft_server_last_update, minecraft_server_is_fav
+                FROM cmw_minecraft_servers WHERE minecraft_server_id = :server_id";
+
+        $db = self::getInstance();
+
+        $res = $db->prepare($sql);
+
+        if (!$res->execute(array("server_id" => $id))) {
+            return null;
+        }
+
+        $res = $res->fetch();
+
+        return new MinecraftServerEntity(
+            $res['minecraft_server_id'],
+            $res['minecraft_server_name'],
+            $res['minecraft_server_ip'],
+            $res['minecraft_server_port'] ?? null,
+            $res['minecraft_server_cmwl_port'] ?? null,
+            $res['minecraft_server_last_update'],
+            $res['minecraft_server_status'],
+            $res['minecraft_server_is_fav'],
+        );
     }
 
     public function addServer(string $serverName, string $serverIp, int $serverStatus, int|null $serverPort = null, int|null $cmwlPort = null): ?MinecraftServerEntity
@@ -117,6 +118,74 @@ class MinecraftModel extends DatabaseManager
         $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute(array("id" => $id));
+    }
+
+    /**
+     * @param int $serverId
+     * @return void
+     * @desc First we clear all old fav servers et we define the new fav server
+     */
+    public function setFav(int $serverId): void
+    {
+        if (!$this->isAlreadyFav($serverId)) {
+            $this->deleteFavs();
+
+            $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_is_fav = 1 WHERE minecraft_server_id = :id";
+
+            $db = self::getInstance();
+            $req = $db->prepare($sql);
+
+            $req->execute(array("id" => $serverId));
+        } else {
+            $this->deleteFavs();
+        }
+    }
+
+    public function isAlreadyFav(int $serverId): bool
+    {
+        $sql = "SELECT minecraft_server_is_fav AS `fav` FROM cmw_minecraft_servers WHERE minecraft_server_id = :id";
+
+        $db = self::getInstance();
+        $req = $db->prepare($sql);
+
+        $req->execute(array("id" => $serverId));
+
+        $res = $req->fetch()['fav'];
+
+        return $res === 1;
+    }
+
+    private function deleteFavs(): void
+    {
+        $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_is_fav = 0 WHERE minecraft_server_is_fav = 1";
+
+        $db = self::getInstance();
+        $db->query($sql);
+    }
+
+    public function getFavServer(): ?MinecraftServerEntity
+    {
+        $sql = "SELECT * FROM cmw_minecraft_servers WHERE minecraft_server_is_fav = 1 LIMIT 1";
+
+        $db = self::getInstance();
+        $req = $db->prepare($sql);
+
+        if (!$req->execute()) {
+            return null;
+        }
+
+        $res = $req->fetch();
+
+        return new MinecraftServerEntity(
+            $res['minecraft_server_id'],
+            $res['minecraft_server_name'],
+            $res['minecraft_server_ip'],
+            $res['minecraft_server_port'] ?? null,
+            $res['minecraft_server_cmwl_port'] ?? null,
+            $res['minecraft_server_last_update'],
+            $res['minecraft_server_status'],
+            $res['minecraft_server_is_fav'],
+        );
     }
 
 }

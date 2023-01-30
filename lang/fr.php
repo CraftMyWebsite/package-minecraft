@@ -18,6 +18,7 @@ return [
         ],
         "list" => [
             "title" => "Liste de vos serveurs",
+            "fav" => "Favoris",
             "name" => "Nom",
             "players" => "Joueurs en ligne",
             "ip" => "IP : PORT",
@@ -40,6 +41,7 @@ return [
             "server_delete" => "Serveur supprimé !",
             "server_add" => "Serveur ajouté !",
             "server_edit" => "Serveur modifié !",
+            "server_fav" => "Favoris modifié",
             "cmwl_first_install" => [
                 "200" => "Configuration de CMW Link réussie",
                 "401" => "Connexion non autorisée",

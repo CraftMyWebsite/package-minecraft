@@ -12,6 +12,7 @@ class MinecraftServerEntity
     private ?int $serverCMWLPort;
     private string $serverLastUpdate;
     private int $serverStatus;
+    private int $isServerFav;
 
     /**
      * @param int $serverId
@@ -21,8 +22,9 @@ class MinecraftServerEntity
      * @param int|null $serverCMWLPort
      * @param string $serverLastUpdate
      * @param int $serverStatus
+     * @param int $isServerFav
      */
-    public function __construct(int $serverId, string $serverName, string $serverIp, ?int $serverPort, ?int $serverCMWLPort, string $serverLastUpdate, int $serverStatus)
+    public function __construct(int $serverId, string $serverName, string $serverIp, ?int $serverPort, ?int $serverCMWLPort, string $serverLastUpdate, int $serverStatus, int $isServerFav)
     {
         $this->serverId = $serverId;
         $this->serverName = $serverName;
@@ -31,6 +33,7 @@ class MinecraftServerEntity
         $this->serverCMWLPort = $serverCMWLPort;
         $this->serverLastUpdate = $serverLastUpdate;
         $this->serverStatus = $serverStatus;
+        $this->isServerFav = $isServerFav;
     }
 
     /**
@@ -87,6 +90,14 @@ class MinecraftServerEntity
     public function getServerStatus(): int
     {
         return $this->serverStatus;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIsServerFav(): int
+    {
+        return $this->isServerFav;
     }
 
 }
