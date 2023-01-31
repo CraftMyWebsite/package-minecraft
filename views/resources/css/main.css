@@ -1,0 +1,7 @@
+.servFav {
+    color: #2a2f3e !important;
+}
+
+.servFav:hover{
+    color: goldenrod !important;
+}

@@ -54,7 +54,7 @@ class MinecraftController extends CoreController
         return null;
     }
 
-    public static function getTotalPlayersOnlines(): int
+    public static function getTotalOnlinePlayers(): int
     {
         $toReturn = 0;
         foreach ((new MinecraftModel())->getServers() as $server) {
@@ -126,11 +126,24 @@ class MinecraftController extends CoreController
 
         View::createAdminView("minecraft", "servers")
             ->addVariableList(["servers" => $servers])
+            ->addStyle("app/package/minecraft/views/resources/css/main.css")
             ->addScriptBefore("app/package/minecraft/views/resources/js/main.js")
             ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
             ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js",
                 "admin/resources/assets/js/pages/simple-datatables.js")
             ->view();
+    }
+
+    #[Link("/servers/fav/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
+    public function adminServersFav(int $serverId): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.fav");
+
+        $this->minecraftModel->setFav($serverId);
+
+        Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_fav'), true);
+
+        header("Location: " .  $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/servers/add", Link::POST, [], "/cmw-admin/minecraft")]
