@@ -4,13 +4,11 @@ namespace CMW\Controller\Minecraft;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
-use CMW\Controller\Votes\VotesController;
 use CMW\Entity\Minecraft\MinecraftPingEntity;
 use CMW\Entity\Minecraft\MinecraftPingPlayersEntity;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Minecraft\MinecraftModel;
-use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
@@ -40,18 +38,16 @@ class MinecraftController extends CoreController
         $this->minecraftModel = new MinecraftModel();
     }
 
-    public static function pingServerOld(string $host, ?int $port = 25565)
+    public static function pingServerOld(string $host, ?int $port = 25565): bool|array
     {
-        try {
-            $query = new MinecraftPing($host, $port, 2);
+        $query = new MinecraftPing($host, $port, 2);
 
+        try {
             return $query->queryOldPre17();
-        } catch (MinecraftPingException $e) {
-            echo $e->getMessage();
         } finally {
             $query?->close();
         }
-        return null;
+
     }
 
     public static function getTotalOnlinePlayers(): int
@@ -71,9 +67,9 @@ class MinecraftController extends CoreController
      */
     public static function pingServer(string $host, ?int $port = 25565): ?MinecraftPingEntity
     {
-        try {
-            $query = new MinecraftPing($host, $port, 2);
+        $query = new MinecraftPing($host, $port, 2);
 
+        try {
             if ($query->connect()) {
                 return $query->query();
             }
@@ -94,6 +90,7 @@ class MinecraftController extends CoreController
         } finally {
             $query?->close();
         }
+
         return null;
     }
 
@@ -180,13 +177,21 @@ class MinecraftController extends CoreController
         header("Location: servers");
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Link("/servers/cmwl/test/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
     public function checkCmwLConfig(int $serverId): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.edit");
+        //UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.edit");
 
         try {
-            $result = json_decode(@APIManager::getRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}"), true, 512, JSON_THROW_ON_ERROR);
+            $req = APIManager::getRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}");
+            if (empty($req)){
+                print(json_encode("false", JSON_THROW_ON_ERROR));
+                die();
+            }
+            $result = json_decode($req, true, 512, JSON_THROW_ON_ERROR);
             if ((int)$result['CODE'] === 200) {
                 try {
                     print(json_encode("true", JSON_THROW_ON_ERROR));
@@ -200,10 +205,14 @@ class MinecraftController extends CoreController
                 } catch (JsonException) {
                 }
             }
-        } catch (JsonException) {
+        } catch (JsonException $e) {
+            print json_encode($e, JSON_THROW_ON_ERROR);
         }
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Link("/servers/list/", Link::GET, [], "/cmw-admin/minecraft")]
     public function getServersIdAndName(): void
     {
@@ -217,7 +226,8 @@ class MinecraftController extends CoreController
 
         try {
             print (json_encode($toReturn, JSON_THROW_ON_ERROR));
-        } catch (JsonException) {
+        } catch (JsonException $e) {
+            print (json_encode($e, JSON_THROW_ON_ERROR));
         }
     }
 

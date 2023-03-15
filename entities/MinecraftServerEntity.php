@@ -3,6 +3,8 @@
 namespace CMW\Entity\Minecraft;
 
 
+use CMW\Manager\Lang\LangManager;
+
 class MinecraftServerEntity
 {
     private int $serverId;
@@ -69,6 +71,14 @@ class MinecraftServerEntity
     }
 
     /**
+     * @return ?int
+     */
+    public function getServerPortFormatted(): ?int
+    {
+        return ($this->serverPort);
+    }
+
+    /**
      * @return int|null
      */
     public function getServerCMWLPort(): ?int
@@ -98,6 +108,15 @@ class MinecraftServerEntity
     public function getIsServerFav(): int
     {
         return $this->isServerFav;
+    }
+
+    public function showServerStatusFormatted(): string
+    {
+        return match ($this->serverStatus) {
+            1 => "<span class='text-success'>" . LangManager::translate("minecraft.servers.status.online") . "</span>",
+            0 => "<span class='text-danger'>" . LangManager::translate("minecraft.servers.status.offline") . "</span>",
+            -1 => "<span class='text-warning'>" . LangManager::translate("minecraft.servers.status.maintenance") . "</span>"
+        };
     }
 
 }
