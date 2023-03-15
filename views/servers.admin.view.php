@@ -69,8 +69,9 @@ $description = LangManager::translate("minecraft.servers.desc");
                         </select>
                     </div>
                     <div class="text-center">
-                        <button type="submit"
-                                class="btn btn-primary"><?= LangManager::translate("core.btn.add") ?></button>
+                        <button type="submit" class="btn btn-primary">
+                            <?= LangManager::translate("core.btn.add") ?>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -106,23 +107,13 @@ $description = LangManager::translate("minecraft.servers.desc");
                             </td>
                             <td><?= $server->getServerName() ?></td>
                             <td>
-                                <?php if (MinecraftController::pingServer($server->getServerIp(), $server->getServerPort())->getPlayersOnline() == 0) {
-                                    echo LangManager::translate("minecraft.servers.list.noplayer");
-                                } else {
-                                    echo "<b class='text-success'>" . MinecraftController::pingServer($server->getServerIp(), $server->getServerPort())->getPlayersOnline() . "</b>";
-                                } ?>
+                                <?= (MinecraftController::pingServer($server->getServerIp(), $server->getServerPort())->getPlayersOnline() === 0)
+                                    ? LangManager::translate("minecraft.servers.list.noplayer")
+                                    : "<b class='text-success'>" . MinecraftController::pingServer($server->getServerIp(), $server->getServerPort())->getPlayersOnline() . "</b>" ?>
                             </td>
-                            <td><?= $server->getServerIp() ?>:<?= $server->getServerPort() ?></td>
+                            <td><?= $server->getServerIp() ?><?= !is_null($server->getServerPortFormatted()) ? ":" : "" ?><?= $server->getServerPortFormatted() ?></td>
                             <td>
-                                <?php if ($server->getServerStatus() == 1) {
-                                    echo "<span class='text-success'>" . LangManager::translate("minecraft.servers.status.online") . "</span>";
-                                } ?>
-                                <?php if ($server->getServerStatus() == 0) {
-                                    echo "<span class='text-danger'>" . LangManager::translate("minecraft.servers.status.offline") . "</span>";
-                                } ?>
-                                <?php if ($server->getServerStatus() == -1) {
-                                    echo "<span class='text-warning'>" . LangManager::translate("minecraft.servers.status.maintenance") . "</span>";
-                                } ?>
+                                <?= $server->showServerStatusFormatted() ?>
                             </td>
                             <td>
                                 <a type="button" data-bs-toggle="modal"
@@ -169,7 +160,7 @@ $description = LangManager::translate("minecraft.servers.desc");
                                             <h6><?= LangManager::translate("minecraft.servers.modal.add.port") ?> :</h6>
                                             <div class="form-group position-relative has-icon-left">
                                                 <input type="text" class="form-control" name="port"
-                                                       placeholder="25565" value="<?= $server->getServerPort() ?>">
+                                                       placeholder="25565" value="<?= $server->getServerPortFormatted() ?>">
                                                 <div class="form-control-icon">
                                                     <i class="fa-solid fa-door-open"></i>
                                                 </div>
