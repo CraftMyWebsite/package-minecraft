@@ -4,6 +4,7 @@ namespace CMW\Controller\Minecraft;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
+use CMW\Controller\Votes\VotesController;
 use CMW\Entity\Minecraft\MinecraftPingEntity;
 use CMW\Entity\Minecraft\MinecraftPingPlayersEntity;
 use CMW\Manager\Api\APIManager;
@@ -161,8 +162,6 @@ class MinecraftController extends CoreController
         header("Location: ../servers");
     }
 
-    //TODO Try to optimize that
-
     #[Link("/servers", Link::POST, [], "/cmw-admin/minecraft")]
     public function adminServersEdit(): void
     {
@@ -186,7 +185,7 @@ class MinecraftController extends CoreController
         //UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.edit");
 
         try {
-            $req = APIManager::getRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}");
+            $req = APIManager::getRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}", cmwlToken: $this->minecraftModel->getServerById($serverId)?->getServerCMWToken());
             if (empty($req)){
                 print(json_encode("false", JSON_THROW_ON_ERROR));
                 die();
@@ -239,8 +238,12 @@ class MinecraftController extends CoreController
     private function sendFirstKeyRequest(int $serverId): void
     {
         try {
+            $privateKey = $this->generateCmwLinkPrivateKey();
+
             $res = @APIManager::postRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}/core/generate/firstKey",
-                ["key" => $this->generateCmwLinkPrivateKey(), "domain" => $_SERVER['HTTP_HOST']]);
+                ["key" => $privateKey, "domain" => $_SERVER['HTTP_HOST']], cmwlToken: $privateKey);
+
+            $this->minecraftModel->setServerToken($serverId, $privateKey);
 
             $code = json_decode($res, JSON_THROW_ON_ERROR, 512, JSON_THROW_ON_ERROR)['CODE'];
 

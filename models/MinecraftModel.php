@@ -38,8 +38,8 @@ class MinecraftModel extends DatabaseManager
 
     public function getServerById(int $id): ?MinecraftServerEntity
     {
-        $sql = "SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, 
-                minecraft_server_cmwl_port, minecraft_server_status, minecraft_server_last_update, minecraft_server_is_fav
+        $sql = "SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, minecraft_server_cmwl_port,
+                 minecraft_server_cmwl_token, minecraft_server_status, minecraft_server_last_update, minecraft_server_is_fav
                 FROM cmw_minecraft_servers WHERE minecraft_server_id = :server_id";
 
         $db = self::getInstance();
@@ -58,6 +58,7 @@ class MinecraftModel extends DatabaseManager
             $res['minecraft_server_ip'],
             $res['minecraft_server_port'] ?? null,
             $res['minecraft_server_cmwl_port'] ?? null,
+            $res['minecraft_server_cmwl_token'] ?? null,
             $res['minecraft_server_last_update'],
             $res['minecraft_server_status'],
             $res['minecraft_server_is_fav'],
@@ -86,6 +87,21 @@ class MinecraftModel extends DatabaseManager
             return $this->getServerById($id);
         }
         return null;
+    }
+
+    public function setServerToken(int $serverId, string $token): void
+    {
+        $var = [
+            "server_id" => $serverId,
+            "server_token" => $token
+        ];
+
+        $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_cmwl_token = :server_token WHERE minecraft_server_id = :server_id";
+        $db = self::getInstance();
+
+        $req = $db->prepare($sql);
+
+        $req->execute($var);
     }
 
     public function updateServer(int $id, string $name, string $ip, int $serverStatus, int|null $port = null, int|null $cmwlPort = null): ?MinecraftServerEntity
@@ -182,6 +198,7 @@ class MinecraftModel extends DatabaseManager
             $res['minecraft_server_ip'],
             $res['minecraft_server_port'] ?? null,
             $res['minecraft_server_cmwl_port'] ?? null,
+            $res['minecraft_server_cmwl_token'] ?? null,
             $res['minecraft_server_last_update'],
             $res['minecraft_server_status'],
             $res['minecraft_server_is_fav'],
