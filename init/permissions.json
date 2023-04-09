@@ -1,0 +1,7 @@
+[
+  "minecraft.servers.delete",
+  "minecraft.servers.list",
+  "minecraft.servers.fav",
+  "minecraft.servers.add",
+  "minecraft.servers.edit"
+]
