@@ -14,6 +14,7 @@ use CMW\Router\Link;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Manager\Views\View;
+use CMW\Utils\Redirect;
 use JsonException;
 use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
@@ -104,7 +105,7 @@ class MinecraftController extends CoreController
 
         Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_delete'), true);
 
-        header("Location: ../../minecraft/servers");
+        Redirect::redirectToPreviousPage();
     }
 
 
@@ -141,7 +142,7 @@ class MinecraftController extends CoreController
 
         Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_fav'), true);
 
-        header("Location: " .  $_SERVER['HTTP_REFERER']);
+        Redirect::redirectToPreviousPage();
     }
 
     #[Link("/servers/add", Link::POST, [], "/cmw-admin/minecraft")]
@@ -159,7 +160,7 @@ class MinecraftController extends CoreController
 
         Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_add'), true);
 
-        header("Location: ../servers");
+        Redirect::redirectToPreviousPage();
     }
 
     #[Link("/servers", Link::POST, [], "/cmw-admin/minecraft")]
@@ -173,7 +174,7 @@ class MinecraftController extends CoreController
 
         Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_edit'), true);
 
-        header("Location: servers");
+        Redirect::redirectToPreviousPage();
     }
 
     /**
