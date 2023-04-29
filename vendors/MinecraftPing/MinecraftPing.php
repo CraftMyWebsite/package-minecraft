@@ -4,7 +4,6 @@ namespace xPaw;
 
 use CMW\Entity\Minecraft\MinecraftPingEntity;
 use CMW\Entity\Minecraft\MinecraftPingPlayersEntity;
-use ErrorException;
 use Exception;
 use function dns_get_record;
 use function explode;
