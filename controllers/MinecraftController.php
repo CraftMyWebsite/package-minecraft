@@ -9,6 +9,7 @@ use CMW\Entity\Minecraft\MinecraftPingEntity;
 use CMW\Entity\Minecraft\MinecraftPingPlayersEntity;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Requests\Request;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Router\Link;
 use CMW\Utils\Response;
@@ -134,7 +135,7 @@ class MinecraftController extends CoreController
     }
 
     #[Link("/servers/fav/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
-    public function adminServersFav(int $serverId): void
+    public function adminServersFav(Request $request, int $serverId): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.fav");
 
@@ -181,7 +182,7 @@ class MinecraftController extends CoreController
      * @throws \JsonException
      */
     #[Link("/servers/cmwl/test/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
-    public function checkCmwLConfig(int $serverId): void
+    public function checkCmwLConfig(Request $request, int $serverId): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.edit");
 
