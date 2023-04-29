@@ -19,8 +19,8 @@ use JsonException;
 use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
 
-require_once(getenv("DIR") . 'app/package/minecraft/vendors/MinecraftPing/MinecraftPing.php');
-require_once(getenv("DIR") . 'app/package/minecraft/vendors/MinecraftPing/MinecraftPingException.php');
+require_once(getenv("DIR") . 'App/Package/Minecraft/Vendors/Minecraftping/MinecraftPing.php');
+require_once(getenv("DIR") . 'App/Package/Minecraft/Vendors/Minecraftping/MinecraftPingException.php');
 
 
 /**
@@ -96,7 +96,7 @@ class MinecraftController extends CoreController
         return null;
     }
 
-    #[Link("/servers/delete", Link::POST, [], "/cmw-admin/minecraft")]
+    #[Link("/servers/delete", Link::POST, [], "/cmw-Admin/minecraft")]
     public function adminServersDelete(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.delete");
@@ -116,7 +116,7 @@ class MinecraftController extends CoreController
      */
 
     #[Link(path: "/minecraft", method: Link::GET, scope: "/cmw-admin")]
-    #[Link("/servers", Link::GET, [], "/cmw-admin/minecraft")]
+    #[Link("/servers", Link::GET, [], "/cmw-Admin/minecraft")]
     public function adminServers(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.list");
@@ -125,15 +125,15 @@ class MinecraftController extends CoreController
 
         View::createAdminView("minecraft", "servers")
             ->addVariableList(["servers" => $servers])
-            ->addStyle("app/package/minecraft/views/resources/css/main.css")
-            ->addScriptBefore("app/package/minecraft/views/resources/js/main.js")
-            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
-            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js",
-                "admin/resources/assets/js/pages/simple-datatables.js")
+            ->addStyle("App/Package/minecraft/Views/Resources/Css/main.css")
+            ->addScriptBefore("App/Package/minecraft/Views/Resources/Js/main.js")
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+                "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
     }
 
-    #[Link("/servers/fav/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
+    #[Link("/servers/fav/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/minecraft")]
     public function adminServersFav(int $serverId): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.fav");
@@ -145,7 +145,7 @@ class MinecraftController extends CoreController
         Redirect::redirectToPreviousPage();
     }
 
-    #[Link("/servers/add", Link::POST, [], "/cmw-admin/minecraft")]
+    #[Link("/servers/add", Link::POST, [], "/cmw-Admin/minecraft")]
     public function adminServersAdd(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.add");
@@ -163,7 +163,7 @@ class MinecraftController extends CoreController
         Redirect::redirectToPreviousPage();
     }
 
-    #[Link("/servers", Link::POST, [], "/cmw-admin/minecraft")]
+    #[Link("/servers", Link::POST, [], "/cmw-Admin/minecraft")]
     public function adminServersEdit(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.edit");
@@ -180,7 +180,7 @@ class MinecraftController extends CoreController
     /**
      * @throws \JsonException
      */
-    #[Link("/servers/cmwl/test/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
+    #[Link("/servers/cmwl/test/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/minecraft")]
     public function checkCmwLConfig(int $serverId): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.edit");
@@ -213,7 +213,7 @@ class MinecraftController extends CoreController
     /**
      * @throws \JsonException
      */
-    #[Link("/servers/list/", Link::GET, [], "/cmw-admin/minecraft")]
+    #[Link("/servers/list/", Link::GET, [], "/cmw-Admin/minecraft")]
     public function getServersIdAndName(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.list");
@@ -245,7 +245,7 @@ class MinecraftController extends CoreController
         try {
             $privateKey = $this->generateCmwLinkPrivateKey();
 
-            $res = @APIManager::postRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}/core/generate/firstKey",
+            $res = @APIManager::postRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}/Core/generate/firstKey",
                 ["key" => $privateKey, "domain" => $_SERVER['HTTP_HOST']], cmwlToken: $privateKey);
 
             $this->minecraftModel->setServerToken($serverId, $privateKey);
