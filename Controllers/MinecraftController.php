@@ -20,8 +20,8 @@ use JsonException;
 use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
 
-require_once(getenv("DIR") . 'App/Package/Minecraft/Vendors/Minecraftping/MinecraftPing.php');
-require_once(getenv("DIR") . 'App/Package/Minecraft/Vendors/Minecraftping/MinecraftPingException.php');
+require_once(getenv("DIR") . 'App/Package/Minecraft/Vendors/MinecraftPing/MinecraftPing.php');
+require_once(getenv("DIR") . 'App/Package/Minecraft/Vendors/MinecraftPing/MinecraftPingException.php');
 
 
 /**
