@@ -5,6 +5,7 @@ namespace CMW\Model\Minecraft;
 
 use CMW\Entity\Minecraft\MinecraftServerEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Package\AbstractModel;
 
 /**
  * Class: @MinecraftModel
@@ -12,7 +13,7 @@ use CMW\Manager\Database\DatabaseManager;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class MinecraftModel extends DatabaseManager
+class MinecraftModel extends AbstractModel
 {
 
     /**
@@ -21,7 +22,7 @@ class MinecraftModel extends DatabaseManager
     public function getServers(): array
     {
         $sql = "SELECT * FROM cmw_minecraft_servers";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
@@ -42,7 +43,7 @@ class MinecraftModel extends DatabaseManager
                  minecraft_server_cmwl_token, minecraft_server_status, minecraft_server_last_update, minecraft_server_is_fav
                 FROM cmw_minecraft_servers WHERE minecraft_server_id = :server_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
@@ -79,7 +80,7 @@ class MinecraftModel extends DatabaseManager
                                                     minecraft_server_cmwl_port, minecraft_server_status)
                 VALUES (:name, :ip, :port, :cmwlPort, :status)";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -97,7 +98,7 @@ class MinecraftModel extends DatabaseManager
         ];
 
         $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_cmwl_token = :server_token WHERE minecraft_server_id = :server_id";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
@@ -119,7 +120,7 @@ class MinecraftModel extends DatabaseManager
                                 minecraft_server_port = :port, minecraft_server_cmwl_port = :cmwlPort, minecraft_server_status = :status
                                 WHERE minecraft_server_id = :id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -131,7 +132,7 @@ class MinecraftModel extends DatabaseManager
     public function deleteServer(int $id): void
     {
         $sql = "DELETE FROM cmw_minecraft_servers WHERE minecraft_server_id = :id";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute(array("id" => $id));
     }
@@ -148,7 +149,7 @@ class MinecraftModel extends DatabaseManager
 
             $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_is_fav = 1 WHERE minecraft_server_id = :id";
 
-            $db = self::getInstance();
+            $db = DatabaseManager::getInstance();
             $req = $db->prepare($sql);
 
             $req->execute(array("id" => $serverId));
@@ -161,7 +162,7 @@ class MinecraftModel extends DatabaseManager
     {
         $sql = "SELECT minecraft_server_is_fav AS `fav` FROM cmw_minecraft_servers WHERE minecraft_server_id = :id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         $req->execute(array("id" => $serverId));
@@ -175,7 +176,7 @@ class MinecraftModel extends DatabaseManager
     {
         $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_is_fav = 0 WHERE minecraft_server_is_fav = 1";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $db->query($sql);
     }
 
@@ -183,7 +184,7 @@ class MinecraftModel extends DatabaseManager
     {
         $sql = "SELECT * FROM cmw_minecraft_servers WHERE minecraft_server_is_fav = 1 LIMIT 1";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute()) {
