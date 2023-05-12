@@ -2,17 +2,17 @@
 
 namespace CMW\Controller\Minecraft;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
 use CMW\Controller\Votes\VotesController;
 use CMW\Entity\Minecraft\MinecraftPingEntity;
 use CMW\Entity\Minecraft\MinecraftPingPlayersEntity;
 use CMW\Manager\Api\APIManager;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Model\Minecraft\MinecraftModel;
-use CMW\Router\Link;
-use CMW\Utils\Response;
+use CMW\Manager\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Manager\Views\View;
 use CMW\Utils\Redirect;
@@ -30,18 +30,10 @@ require_once(getenv("DIR") . 'App/Package/Minecraft/Vendors/MinecraftPing/Minecr
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class MinecraftController extends CoreController
+class MinecraftController extends AbstractController
 {
 
-    private MinecraftModel $minecraftModel;
-
-    public function __construct($theme_path = null)
-    {
-        parent::__construct($theme_path);
-        $this->minecraftModel = new MinecraftModel();
-    }
-
-    public static function pingServerOld(string $host, ?int $port = 25565): bool|array
+    private static function pingServerOld(string $host, ?int $port = 25565): bool|array
     {
         $query = new MinecraftPing($host, $port, 2);
 
@@ -53,7 +45,7 @@ class MinecraftController extends CoreController
 
     }
 
-    public static function getTotalOnlinePlayers(): int
+    private static function getTotalOnlinePlayers(): int
     {
         $toReturn = 0;
         foreach ((new MinecraftModel())->getServers() as $server) {
@@ -98,13 +90,13 @@ class MinecraftController extends CoreController
     }
 
     #[Link("/servers/delete", Link::POST, [], "/cmw-admin/minecraft")]
-    public function adminServersDelete(): void
+    private function adminServersDelete(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.delete");
 
-        $this->minecraftModel->deleteServer(filter_input(INPUT_POST, "serverId"));
+        minecraftModel::getInstance()->deleteServer(filter_input(INPUT_POST, "serverId"));
 
-        Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_delete'), true);
+        Flash::send("success", "", LangManager::translate('minecraft.servers.toasters.server_delete'), true);
 
         Redirect::redirectToPreviousPage();
     }
@@ -118,16 +110,16 @@ class MinecraftController extends CoreController
 
     #[Link(path: "/minecraft", method: Link::GET, scope: "/cmw-admin")]
     #[Link("/servers", Link::GET, [], "/cmw-admin/minecraft")]
-    public function adminServers(): void
+    private function adminServers(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.list");
 
-        $servers = $this->minecraftModel->getServers();
+        $servers = minecraftModel::getInstance()->getServers();
 
-        View::createAdminView("minecraft", "servers")
+        View::createAdminView("Minecraft", "servers")
             ->addVariableList(["servers" => $servers])
-            ->addStyle("App/Package/minecraft/Views/Resources/Css/main.css")
-            ->addScriptBefore("App/Package/minecraft/Views/Resources/Js/main.js")
+            ->addStyle("App/Package/Minecraft/Views/Resources/Css/main.css")
+            ->addScriptBefore("App/Package/Minecraft/Views/Resources/Js/main.js")
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
                 "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
@@ -135,45 +127,45 @@ class MinecraftController extends CoreController
     }
 
     #[Link("/servers/fav/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
-    public function adminServersFav(Request $request, int $serverId): void
+    private function adminServersFav(Request $request, int $serverId): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.fav");
 
-        $this->minecraftModel->setFav($serverId);
+        minecraftModel::getInstance()->setFav($serverId);
 
-        Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_fav'), true);
+        Flash::send("success", "", LangManager::translate('minecraft.servers.toasters.server_fav'), true);
 
         Redirect::redirectToPreviousPage();
     }
 
     #[Link("/servers/add", Link::POST, [], "/cmw-admin/minecraft")]
-    public function adminServersAdd(): void
+    private function adminServersAdd(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.add");
 
         [$name, $ip, $status, $port, $cmwlPort] = Utils::filterInput("name", "ip", "status", "port", "cmwlPort");
 
-        $server = $this->minecraftModel->addServer($name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
+        $server = minecraftModel::getInstance()->addServer($name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
 
         if (!empty($cmwlPort)) {
-            $this->sendFirstKeyRequest($server?->getServerId());
+            sendFirstKeyRequest($server?->getServerId())::getInstance();
         }
 
-        Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_add'), true);
+        Flash::send("success", "", LangManager::translate('minecraft.servers.toasters.server_add'), true);
 
         Redirect::redirectToPreviousPage();
     }
 
     #[Link("/servers", Link::POST, [], "/cmw-admin/minecraft")]
-    public function adminServersEdit(): void
+    private function adminServersEdit(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.edit");
 
         [$id, $name, $ip, $status, $port, $cmwlPort] = Utils::filterInput("serverId", "name", "ip", "status", "port", "cmwlPort");
 
-        $this->minecraftModel->updateServer($id, $name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
+        minecraftModel::getInstance()->updateServer($id, $name, $ip, $status, ($port === "" ? null : $port), ($cmwlPort === "" ? null : $cmwlPort));
 
-        Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.server_edit'), true);
+        Flash::send("success", "", LangManager::translate('minecraft.servers.toasters.server_edit'), true);
 
         Redirect::redirectToPreviousPage();
     }
@@ -182,12 +174,12 @@ class MinecraftController extends CoreController
      * @throws \JsonException
      */
     #[Link("/servers/cmwl/test/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
-    public function checkCmwLConfig(Request $request, int $serverId): void
+    private function checkCmwLConfig(Request $request, int $serverId): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.edit");
 
         try {
-            $req = APIManager::getRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}", cmwlToken: $this->minecraftModel->getServerById($serverId)?->getServerCMWToken());
+            $req = APIManager::getRequest("http://{minecraftModel::getInstance()->getServerById($serverId)?->getServerIp()}:{minecraftModel::getInstance()->getServerById($serverId)?->getServerCMWLPort()}", cmwlToken: minecraftModel::getInstance()->getServerById($serverId)?->getServerCMWToken());
             if (empty($req)){
                 print(json_encode("false", JSON_THROW_ON_ERROR));
                 die();
@@ -196,13 +188,13 @@ class MinecraftController extends CoreController
             if ((int)$result['CODE'] === 200) {
                 try {
                     print(json_encode("true", JSON_THROW_ON_ERROR));
-                    Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.test_cmw_response_success'), true);
+                    Flash::send("success", "", LangManager::translate('minecraft.servers.toasters.test_cmw_response_success'), true);
                 } catch (JsonException) {
                 }
             } else {
                 try {
                     print(json_encode("false", JSON_THROW_ON_ERROR));
-                    Response::sendAlert("error", "", LangManager::translate('minecraft.servers.toasters.test_cmw_response_error'), true);
+                    Flash::send("error", "", LangManager::translate('minecraft.servers.toasters.test_cmw_response_error'), true);
                 } catch (JsonException) {
                 }
             }
@@ -215,13 +207,13 @@ class MinecraftController extends CoreController
      * @throws \JsonException
      */
     #[Link("/servers/list/", Link::GET, [], "/cmw-admin/minecraft")]
-    public function getServersIdAndName(): void
+    private function getServersIdAndName(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.list");
 
         $toReturn = [];
 
-        foreach ($this->minecraftModel->getServers() as $server) {
+        foreach (minecraftModel::getInstance()->getServers() as $server) {
             $toReturn[$server->getServerId()][] = $server->getServerName();
         }
 
@@ -244,40 +236,40 @@ class MinecraftController extends CoreController
         }
 
         try {
-            $privateKey = $this->generateCmwLinkPrivateKey();
+            $privateKey = generateCmwLinkPrivateKey()::getInstance();
 
-            $res = @APIManager::postRequest("http://{$this->minecraftModel->getServerById($serverId)?->getServerIp()}:{$this->minecraftModel->getServerById($serverId)?->getServerCMWLPort()}/Core/generate/firstKey",
+            $res = @APIManager::postRequest("http://{minecraftModel::getInstance()->getServerById($serverId)?->getServerIp()}:{minecraftModel::getInstance()->getServerById($serverId)?->getServerCMWLPort()}/Core/generate/firstKey",
                 ["key" => $privateKey, "domain" => $_SERVER['HTTP_HOST']], cmwlToken: $privateKey);
 
-            $this->minecraftModel->setServerToken($serverId, $privateKey);
+            minecraftModel::getInstance()->setServerToken($serverId, $privateKey);
 
             $code = json_decode($res, JSON_THROW_ON_ERROR, 512, JSON_THROW_ON_ERROR)['CODE'];
 
             switch ($code) {
                 case "200":
                     // Success
-                    Response::sendAlert("success", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.200'), true);
+                    Flash::send("success", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.200'), true);
                     break;
                 case "401":
                     // Non-Authorized
-                    Response::sendAlert("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.401'), true);
+                    Flash::send("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.401'), true);
                     break;
                 case "404":
                     // Undefined url
-                    Response::sendAlert("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.404'), true);
+                    Flash::send("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.404'), true);
                     break;
                 case "418":
                     // Internal error
-                    Response::sendAlert("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.418'), true);
+                    Flash::send("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.418'), true);
                     break;
                 default:
                     // Undefined error
-                    Response::sendAlert("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.other'), true);
+                    Flash::send("error", "", LangManager::translate('minecraft.servers.toasters.cmwl_first_install.other'), true);
                     break;
             }
 
         } catch (JsonException $e) {
-            Response::sendAlert("error", "", $e->getMessage(), true);
+            Flash::send("error", "", $e->getMessage(), true);
             return;
         }
     }
