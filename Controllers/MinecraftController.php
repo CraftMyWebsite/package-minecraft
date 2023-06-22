@@ -6,6 +6,7 @@ use CMW\Controller\Users\UsersController;
 use CMW\Entity\Minecraft\MinecraftPingEntity;
 use CMW\Entity\Minecraft\MinecraftPingPlayersEntity;
 use CMW\Manager\Api\APIManager;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -20,8 +21,8 @@ use JsonException;
 use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
 
-require_once(getenv("DIR") . 'App/Package/Minecraft/Vendors/MinecraftPing/MinecraftPing.php');
-require_once(getenv("DIR") . 'App/Package/Minecraft/Vendors/MinecraftPing/MinecraftPingException.php');
+require_once(EnvManager::getInstance()->getValue("DIR") . 'App/Package/Minecraft/Vendors/MinecraftPing/MinecraftPing.php');
+require_once(EnvManager::getInstance()->getValue("DIR") . 'App/Package/Minecraft/Vendors/MinecraftPing/MinecraftPingException.php');
 
 
 /**
