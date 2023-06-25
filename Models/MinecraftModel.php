@@ -158,6 +158,20 @@ class MinecraftModel extends AbstractModel
         }
     }
 
+    public function favExist(): bool
+    {
+        $sql = "SELECT minecraft_server_is_fav AS `fav` FROM cmw_minecraft_servers WHERE minecraft_server_is_fav = 1";
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+
+        $req->execute();
+
+        $res = $req->fetch()['fav'];
+
+        return $res === 1;
+    }
+
     public function isAlreadyFav(int $serverId): bool
     {
         $sql = "SELECT minecraft_server_is_fav AS `fav` FROM cmw_minecraft_servers WHERE minecraft_server_id = :id";
