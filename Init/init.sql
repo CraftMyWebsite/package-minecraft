@@ -12,4 +12,5 @@ CREATE TABLE IF NOT EXISTS `cmw_minecraft_servers`
     PRIMARY KEY (`minecraft_server_id`),
     UNIQUE KEY (`minecraft_server_name`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
