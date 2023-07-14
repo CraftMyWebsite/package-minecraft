@@ -163,13 +163,9 @@ class MinecraftModel extends AbstractModel
         $sql = "SELECT minecraft_server_is_fav AS `fav` FROM cmw_minecraft_servers WHERE minecraft_server_is_fav = 1";
 
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare($sql);
+        $req = $db->query($sql);
 
-        $req->execute();
-
-        $res = $req->fetch()['fav'];
-
-        return $res === 1;
+        return isset($req->fetch()['fav']);
     }
 
     public function isAlreadyFav(int $serverId): bool
