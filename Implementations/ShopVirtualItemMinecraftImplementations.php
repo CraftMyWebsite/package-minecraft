@@ -37,9 +37,11 @@ class ShopVirtualItemMinecraftImplementations implements IVirtualItems
         require_once EnvManager::getInstance()->getValue("DIR") . "App/Package/Minecraft/Views/Elements/commands.config.inc.view.php";
     }
 
-    public function includeGlobalConfigWidgets(): void
+    public function includeGlobalConfigWidgets(): void {}
+
+    public function useGlobalConfigWidgetsInShopConfig(): bool
     {
-        return;
+        return false;
     }
 
     public function execOnBuy(string $varName, ShopItemEntity $item, UserEntity $user): void
