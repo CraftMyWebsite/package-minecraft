@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Implementation\Minecraft;
+namespace CMW\Implementation\Minecraft\Shop;
 
 use CMW\Controller\Minecraft\ShopMinecraftController;
 use CMW\Entity\Shop\Items\ShopItemEntity;
@@ -8,7 +8,6 @@ use CMW\Entity\Users\UserEntity;
 use CMW\Interface\Shop\IVirtualItems;
 use CMW\Manager\Env\EnvManager;
 
-//TODO : Ne pas implémenter si le package shop n'est pas présent
 class ShopVirtualItemMinecraftImplementations implements IVirtualItems
 {
     public function name(): string
