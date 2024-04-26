@@ -2,7 +2,7 @@
 
 namespace CMW\Implementation\Minecraft\Shop;
 
-use CMW\Controller\Minecraft\ShopMinecraftController;
+use CMW\Controller\Minecraft\Shop\ShopMinecraftController;
 use CMW\Entity\Shop\Items\ShopItemEntity;
 use CMW\Entity\Users\UserEntity;
 use CMW\Interface\Shop\IVirtualItems;
@@ -45,12 +45,12 @@ class ShopVirtualItemMinecraftImplementations implements IVirtualItems
 
     public function execOnBuy(string $varName, ShopItemEntity $item, UserEntity $user): void
     {
-        ShopMinecraftController::getInstance()->sendCommands($varName, $item, $user);
+        ShopMinecraftController::getInstance()->execMcNeeds($varName, $item, $user);
     }
 
     public function execOnCancel(string $varName, ShopItemEntity $item, UserEntity $user): void
     {
-        ShopMinecraftController::getInstance()->sendCommands($varName, $item, $user);
+        ShopMinecraftController::getInstance()->execMcNeeds($varName, $item, $user);
     }
 
 }
