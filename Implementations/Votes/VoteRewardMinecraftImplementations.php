@@ -21,7 +21,7 @@ class VoteRewardMinecraftImplementations implements IRewardMethod
         return "minecraft";
     }
 
-    public function includeRewardConfigWidgets(): void
+    public function includeRewardConfigWidgets(?int $rewardId): void
     {
         $varName = $this->varName();
         require_once EnvManager::getInstance()->getValue("DIR") . "App/Package/Minecraft/Views/Elements/voteReward.config.inc.view.php";
