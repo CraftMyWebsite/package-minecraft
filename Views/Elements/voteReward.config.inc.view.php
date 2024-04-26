@@ -34,7 +34,6 @@ if (!is_null($rewardId)) {
         <select id="<?=$varName?>_servers" name="<?=$varName?>_servers[]" class="form-control" required multiple>
         </select>
     </div>
-    <?php var_dump($jsonServers);?>
     <h6>A savoir.</h6>
     <p>- Séparez vos commandes avec un pipe : | (Alt Gr + 6) si vous souhaitez en exécuter plusieurs<br>
     - Ne pas utiliser "/" dans les commandes<br>
