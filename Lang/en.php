@@ -49,7 +49,17 @@ return [
                 "418" => "Internal error",
                 "other" => "Undefined error",
             ],
-        ]
+        ],
     ],
-
+    "permissions" => [
+        "minecraft" => [
+            "servers" => [
+                "delete" => "Delete a server",
+                "list" => "Show a server",
+                "fav" => "Add/Delete a server to favorite",
+                "add" => "Add a server",
+                "edit" => "Edit a server",
+            ],
+        ],
+    ],
 ];
