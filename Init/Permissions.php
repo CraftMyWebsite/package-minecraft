@@ -12,24 +12,24 @@ class Permissions implements IPermissionInit
     {
         return [
             new PermissionInitType(
-                code: 'minecraft.servers.delete',
-                description: LangManager::translate('minecraft.permissions.minecraft.servers.delete'),
-            ),
-            new PermissionInitType(
-                code: 'minecraft.servers.list',
+                code: 'minecraft.list',
                 description: LangManager::translate('minecraft.permissions.minecraft.servers.list'),
             ),
             new PermissionInitType(
-                code: 'minecraft.servers.fav',
+                code: 'minecraft.fav',
                 description: LangManager::translate('minecraft.permissions.minecraft.servers.fav'),
             ),
             new PermissionInitType(
-                code: 'minecraft.servers.add',
+                code: 'minecraft.add',
                 description: LangManager::translate('minecraft.permissions.minecraft.servers.add'),
             ),
             new PermissionInitType(
-                code: 'minecraft.servers.edit',
+                code: 'minecraft.edit',
                 description: LangManager::translate('minecraft.permissions.minecraft.servers.edit'),
+            ),
+            new PermissionInitType(
+                code: 'minecraft.delete',
+                description: LangManager::translate('minecraft.permissions.minecraft.servers.delete'),
             ),
         ];
     }

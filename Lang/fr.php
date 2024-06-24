@@ -55,11 +55,11 @@ return [
     "permissions" => [
         "minecraft" => [
             "servers" => [
-                "delete" => "Supprimer un serveur",
-                "list" => "Afficher les serveurs",
-                "fav" => "Ajouter/Supprimer un serveur favoris",
-                "add" => "Ajouter un serveur",
-                "edit" => "Modifier un serveur",
+                "delete" => "Supprimer",
+                "list" => "Afficher",
+                "fav" => "Gérer les favoris",
+                "add" => "Ajouter",
+                "edit" => "Modifier",
             ],
         ],
     ],

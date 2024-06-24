@@ -93,7 +93,7 @@ class MinecraftController extends AbstractController
     #[Link("/servers/delete", Link::POST, [], "/cmw-admin/minecraft")]
     private function adminServersDelete(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.delete");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.delete");
 
         minecraftModel::getInstance()->deleteServer(filter_input(INPUT_POST, "serverId"));
 
@@ -113,7 +113,7 @@ class MinecraftController extends AbstractController
     #[Link("/servers", Link::GET, [], "/cmw-admin/minecraft")]
     private function adminServers(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.list");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.list");
 
         $servers = minecraftModel::getInstance()->getServers();
 
@@ -130,7 +130,7 @@ class MinecraftController extends AbstractController
     #[Link("/servers/fav/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
     private function adminServersFav(Request $request, int $serverId): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.fav");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.fav");
 
         minecraftModel::getInstance()->setFav($serverId);
 
@@ -142,7 +142,7 @@ class MinecraftController extends AbstractController
     #[Link("/servers/add", Link::POST, [], "/cmw-admin/minecraft")]
     private function adminServersAdd(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.add");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.add");
 
         [$name, $ip, $status, $port, $cmwlPort] = Utils::filterInput("name", "ip", "status", "port", "cmwlPort");
 
@@ -160,7 +160,7 @@ class MinecraftController extends AbstractController
     #[Link("/servers", Link::POST, [], "/cmw-admin/minecraft")]
     private function adminServersEdit(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.edit");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.edit");
 
         [$id, $name, $ip, $status, $port, $cmwlPort] = Utils::filterInput("serverId", "name", "ip", "status", "port", "cmwlPort");
 
@@ -177,7 +177,7 @@ class MinecraftController extends AbstractController
     #[Link("/servers/cmwl/test/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
     private function checkCmwLConfig(Request $request, int $serverId): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.edit");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.edit");
 
         try {
             $req = APIManager::getRequest("http://" . MinecraftModel::getInstance()->getServerById($serverId)?->getServerIp() . ":" . MinecraftModel::getInstance()->getServerById($serverId)?->getServerCMWLPort(),
@@ -211,7 +211,7 @@ class MinecraftController extends AbstractController
     #[Link("/servers/list/", Link::GET, [], "/cmw-admin/minecraft")]
     private function getServersIdAndName(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.servers.list");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.list");
 
         $toReturn = [];
 
@@ -233,7 +233,7 @@ class MinecraftController extends AbstractController
      */
     private function sendFirstKeyRequest(int $serverId): void
     {
-        if(!UsersController::hasPermission("core.dashboard", "minecraft.servers.add")){
+        if(!UsersController::hasPermission("core.dashboard", "minecraft.add")){
             return;
         }
 

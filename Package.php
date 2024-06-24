@@ -41,7 +41,7 @@ class Package implements IPackageConfig
                 icon: "fas fa-cube",
                 title: "Minecraft",
                 url: "minecraft/servers",
-                permission: "minecraft.servers.list",
+                permission: "minecraft.list",
                 subMenus: []
             ),
             new PackageMenuType(
@@ -49,7 +49,7 @@ class Package implements IPackageConfig
                 icon: "fas fa-cube",
                 title: "Minecraft",
                 url: "minecraft/servers",
-                permission: "minecraft.servers.list",
+                permission: "minecraft.list",
                 subMenus: []
             ),
         ];

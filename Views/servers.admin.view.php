@@ -11,237 +11,187 @@ $description = LangManager::translate("minecraft.servers.desc");
 /* @var MinecraftServerEntity[] $servers */
 ?>
 
-<div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fas fa-cube"></i> <span class="m-lg-auto">Minecraft</span></h3>
-</div>
+<h3><i class="fas fa-cube"></i> Minecraft</h3>
 
-
-<div class="row">
-    <div class="col-12 col-lg-5">
-        <div class="card">
-            <div class="card-header">
-                <h4><?= LangManager::translate("minecraft.servers.modal.add.title") ?></h4>
+<div class="grid-3">
+    <div class="card">
+        <h6><?= LangManager::translate("minecraft.servers.modal.add.title") ?></h6>
+        <form method="post" action="servers/add">
+            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <label for="name"><?= LangManager::translate("minecraft.servers.modal.add.name") ?> :</label>
+            <div class="input-group">
+                <i class="fas fa-heading"></i>
+                <input type="text" id="name" name="name" required
+                       placeholder="CraftMySkyBlock">
             </div>
-            <div class="card-body">
-                <form method="post" action="servers/add">
-                    <?php (new SecurityManager())->insertHiddenToken() ?>
-                    <h6><?= LangManager::translate("minecraft.servers.modal.add.name") ?> :</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="name" required
-                               placeholder="CraftMySkyBlock">
-                        <div class="form-control-icon">
-                            <i class="fas fa-heading"></i>
-                        </div>
-                    </div>
-                    <h6><?= LangManager::translate("minecraft.servers.modal.add.ip") ?> :</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="ip" required
-                               placeholder="mc.craftmywebsite.fr">
-                        <div class="form-control-icon">
-                            <i class="fa-solid fa-at"></i>
-                        </div>
-                    </div>
-                    <h6><?= LangManager::translate("minecraft.servers.modal.add.port") ?> :</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="port"
-                               placeholder="25565">
-                        <div class="form-control-icon">
-                            <i class="fa-solid fa-door-open"></i>
-                        </div>
-                    </div>
-                    <h6><?= LangManager::translate("minecraft.servers.modal.add.cmwl_port") ?> :</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="cmwlPort"
-                               placeholder="24102">
-                        <div class="form-control-icon">
-                            <i class="fa-solid fa-door-open"></i>
-                        </div>
-                        <small><?= LangManager::translate("minecraft.servers.hint_cmwl_port") ?></small>
-                    </div>
-                    <div class="form-group">
-                        <label for="status"><?= LangManager::translate("minecraft.servers.status.title") ?></label>
-                        <select name="status" id="status" class="form-control">
-                            <option value="-1" selected>
-                                <?= LangManager::translate("minecraft.servers.status.maintenance") ?>
-                            </option>
-                            <option value="0"><?= LangManager::translate("minecraft.servers.status.offline") ?></option>
-                            <option value="1"><?= LangManager::translate("minecraft.servers.status.online") ?></option>
-                        </select>
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">
-                            <?= LangManager::translate("core.btn.add") ?>
-                        </button>
-                    </div>
-                </form>
+            <label for="ip"><?= LangManager::translate("minecraft.servers.modal.add.ip") ?> :</label>
+            <div class="input-group">
+                <i class="fa-solid fa-at"></i>
+                <input type="text" id="ip" name="ip" required
+                       placeholder="mc.craftmywebsite.fr">
             </div>
-        </div>
+            <label for="port"><?= LangManager::translate("minecraft.servers.modal.add.port") ?> :</label>
+            <div class="input-group">
+                <i class="fa-solid fa-door-open"></i>
+                <input type="number" id="port" name="port"
+                       placeholder="25565">
+            </div>
+            <label for="cmwlPort"><?= LangManager::translate("minecraft.servers.modal.add.cmwl_port") ?> :</label>
+            <div class="input-group">
+                <i class="fa-solid fa-door-open"></i>
+                <input type="number" id="cmwlPort" name="cmwlPort"
+                       placeholder="24102">
+            </div>
+            <small><?= LangManager::translate("minecraft.servers.hint_cmwl_port") ?></small>
+            <label for="status" class="mt-2"><?= LangManager::translate("minecraft.servers.status.title") ?></label>
+            <select name="status" id="status">
+                <option value="-1" selected>
+                <?= LangManager::translate("minecraft.servers.status.maintenance") ?>
+                </option>
+                <option value="0"><?= LangManager::translate("minecraft.servers.status.offline") ?></option>
+                <option value="1"><?= LangManager::translate("minecraft.servers.status.online") ?></option>
+            </select>
+            <button type="submit" class="btn-primary btn-center mt-3">
+                <?= LangManager::translate("core.btn.add") ?>
+            </button>
+        </form>
     </div>
-    <div class="col-12 col-lg-7">
-        <div class="card">
-            <div class="card-header">
-                <h4><?= LangManager::translate("minecraft.servers.list.title") ?></h4>
-            </div>
-            <div class="card-body">
-                <table class="table" id="table1">
-                    <thead>
+    <div class="card col-span-2">
+        <h6><?= LangManager::translate("minecraft.servers.list.title") ?></h6>
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th><?= LangManager::translate("minecraft.servers.list.fav") ?></th>
+                    <th><?= LangManager::translate("minecraft.servers.list.name") ?></th>
+                    <th><?= LangManager::translate("minecraft.servers.list.players") ?></th>
+                    <th><?= LangManager::translate("minecraft.servers.list.ip") ?></th>
+                    <th><?= LangManager::translate("minecraft.servers.list.state") ?></th>
+                    <th class="text-center"><?= LangManager::translate("minecraft.servers.list.action") ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($servers as $server) : ?>
                     <tr>
-                        <th class="text-center"><?= LangManager::translate("minecraft.servers.list.fav") ?></th>
-                        <th class="text-center"><?= LangManager::translate("minecraft.servers.list.name") ?></th>
-                        <th class="text-center"><?= LangManager::translate("minecraft.servers.list.players") ?></th>
-                        <th class="text-center"><?= LangManager::translate("minecraft.servers.list.ip") ?></th>
-                        <th class="text-center"><?= LangManager::translate("minecraft.servers.list.state") ?></th>
-                        <th class="text-center"><?= LangManager::translate("minecraft.servers.list.action") ?></th>
-                    </tr>
-                    </thead>
-                    <tbody class="text-center">
-                    <?php foreach ($servers as $server) : ?>
-                        <tr>
-                            <td>
-                                <a href="servers/fav/<?= $server->getServerId() ?>" class="servFav">
-                                    <i class="fa-solid fa-star"
-                                        <?= $server->getIsServerFav() ? 'style="color: goldenrod"' : '' ?>>
-                                    </i>
+                        <td>
+                            <a href="servers/fav/<?= $server->getServerId() ?>" class="servFav">
+                                <i class="fa-solid fa-star"
+                                    <?= $server->getIsServerFav() ? 'style="color: goldenrod"' : '' ?>>
+                                </i>
 
-                                </a>
-                            </td>
-                            <td><?= $server->getServerName() ?></td>
-                            <td>
-                                <?= (MinecraftController::pingServer($server->getServerIp(), $server->getServerPort())->getPlayersOnline() === 0)
-                                    ? LangManager::translate("minecraft.servers.list.noplayer")
-                                    : "<b class='text-success'>" . MinecraftController::pingServer($server->getServerIp(), $server->getServerPort())->getPlayersOnline() . "</b>" ?>
-                            </td>
-                            <td><?= $server->getServerIp() ?><?= !is_null($server->getServerPortFormatted()) ? ":" : "" ?><?= $server->getServerPortFormatted() ?></td>
-                            <td>
-                                <?= $server->showServerStatusFormatted() ?>
-                            </td>
-                            <td>
-                                <a type="button" data-bs-toggle="modal"
-                                   data-bs-target="#edit-<?= $server->getServerId() ?>">
-                                    <i class="text-primary me-3 fas fa-edit"></i>
-                                </a>
-                                <a type="button" data-bs-toggle="modal"
-                                   data-bs-target="#delete-<?= $server->getServerId() ?>">
-                                    <i class="text-danger fas fa-trash-alt"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <div class="modal modal-lg fade text-left" id="edit-<?= $server->getServerId() ?>" tabindex="-1"
-                             role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-primary">
-                                        <h5 class="modal-title white"
-                                            id="myModalLabel160"><?= LangManager::translate("minecraft.servers.modal.editing") ?> <?= $server->getServerName() ?></h5>
+                            </a>
+                        </td>
+                        <td><?= $server->getServerName() ?></td>
+                        <td>
+                            <?= (MinecraftController::pingServer($server->getServerIp(), $server->getServerPort())->getPlayersOnline() === 0)
+                                ? LangManager::translate("minecraft.servers.list.noplayer")
+                                : "<b class='text-success'>" . MinecraftController::pingServer($server->getServerIp(), $server->getServerPort())->getPlayersOnline() . "</b>" ?>
+                        </td>
+                        <td><?= $server->getServerIp() ?><?= !is_null($server->getServerPortFormatted()) ? ":" : "" ?><?= $server->getServerPortFormatted() ?></td>
+                        <td>
+                            <?= $server->showServerStatusFormatted() ?>
+                        </td>
+                        <td class="text-center space-x-2">
+                            <button data-modal-toggle="modal-edit-<?= $server->getServerId() ?>" type="button"><i class="text-info fas fa-edit"></i></button>
+                            <button data-modal-toggle="modal-delete-<?= $server->getServerId() ?>" type="button"><i class="text-danger fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+
+                    <div id="modal-edit-<?= $server->getServerId() ?>" class="modal-container">
+                        <div class="modal-xl">
+                            <div class="modal-header">
+                                <h6><?= LangManager::translate("minecraft.servers.modal.editing") ?> <?= $server->getServerName() ?></h6>
+                                <button type="button" data-modal-hide="modal-edit-<?= $server->getServerId() ?>"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <form id="serveredit-<?= $server->getServerId() ?>" method="post" action="">
+                                <?php (new SecurityManager())->insertHiddenToken() ?>
+                            <div class="modal-body">
+                                <div class="grid-2">
+                                    <div>
+                                        <input type="text" name="serverId" value="<?= $server->getServerId() ?>"
+                                               hidden>
+                                        <label for="name"><?= LangManager::translate("minecraft.servers.modal.add.name") ?> :</label>
+                                        <div class="input-group">
+                                            <i class="fas fa-heading"></i>
+                                            <input type="text" id="name" name="name" required
+                                                   placeholder="CraftMySkyBlock"
+                                                   value="<?= $server->getServerName() ?>">
+                                        </div>
                                     </div>
-                                    <div class="modal-body">
-                                        <form id="serveredit-<?= $server->getServerId() ?>" method="post" action="">
-                                            <?php (new SecurityManager())->insertHiddenToken() ?>
-                                            <input type="text" name="serverId" value="<?= $server->getServerId() ?>"
-                                                   hidden>
-                                            <h6><?= LangManager::translate("minecraft.servers.modal.add.name") ?> :</h6>
-                                            <div class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control" name="name" required
-                                                       placeholder="CraftMySkyBlock"
-                                                       value="<?= $server->getServerName() ?>">
-                                                <div class="form-control-icon">
-                                                    <i class="fas fa-heading"></i>
-                                                </div>
-                                            </div>
-                                            <h6><?= LangManager::translate("minecraft.servers.modal.add.ip") ?> :</h6>
-                                            <div class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control" name="ip" required
-                                                       placeholder="mc.craftmywebsite.fr"
-                                                       value="<?= $server->getServerIp() ?>">
-                                                <div class="form-control-icon">
-                                                    <i class="fa-solid fa-at"></i>
-                                                </div>
-                                            </div>
-                                            <h6><?= LangManager::translate("minecraft.servers.modal.add.port") ?> :</h6>
-                                            <div class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control" name="port"
-                                                       placeholder="25565" value="<?= $server->getServerPortFormatted() ?>">
-                                                <div class="form-control-icon">
-                                                    <i class="fa-solid fa-door-open"></i>
-                                                </div>
-                                            </div>
-                                            <h6><?= LangManager::translate("minecraft.servers.modal.add.cmwl_port") ?>
-                                                :</h6>
-                                            <div class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control" name="cmwlPort"
-                                                       placeholder="24102" value="<?= $server->getServerCMWLPort() ?>">
-                                                <div class="form-control-icon">
-                                                    <i class="fa-solid fa-door-open"></i>
-                                                </div>
-                                                <small><?= LangManager::translate("minecraft.servers.hint_cmwl_port") ?></small>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="status"><?= LangManager::translate("minecraft.servers.status.title") ?></label>
-                                                <select name="status" id="status" class="form-control">
-                                                    <option value="-1" <?= $server->getServerStatus() === -1 ? "selected" : "" ?>>
-                                                        <?= LangManager::translate("minecraft.servers.status.maintenance") ?>
-                                                    </option>
-                                                    <option value="0" <?= $server->getServerStatus() === 0 ? "selected" : "" ?>>
-                                                        <?= LangManager::translate("minecraft.servers.status.offline") ?>
-                                                    </option>
-                                                    <option value="1" <?= $server->getServerStatus() === 1 ? "selected" : "" ?>>
-                                                        <?= LangManager::translate("minecraft.servers.status.online") ?>
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </form>
+                                    <div>
+                                        <label for="ip"><?= LangManager::translate("minecraft.servers.modal.add.ip") ?> :</label>
+                                        <div class="input-group">
+                                            <i class="fa-solid fa-at"></i>
+                                            <input type="text" id="ip" name="ip" required
+                                                   placeholder="mc.craftmywebsite.fr"
+                                                   value="<?= $server->getServerIp() ?>">
+                                        </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                            <i class="bx bx-x d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
-                                        </button>
-                                        <button onclick="checkCMWLConfig(<?= $server->getServerId() ?>)"
-                                                class="btn btn-light-primary">
-                                            <i class="bx bx-x d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block"><?= LangManager::translate('minecraft.servers.test_cmwl') ?></span>
-                                        </button>
-                                        <button type="submit" form="serveredit-<?= $server->getServerId() ?>"
-                                                class="btn btn-success ml-1" data-bs-dismiss="modal">
-                                            <i class="bx bx-check d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.save") ?></span>
-                                        </button>
+                                    <div>
+                                        <label for="port"><?= LangManager::translate("minecraft.servers.modal.add.port") ?> :</label>
+                                        <div class="input-group">
+                                            <i class="fa-solid fa-door-open"></i>
+                                            <input type="number" id="port" name="port"
+                                                   placeholder="25565" value="<?= $server->getServerPortFormatted() ?>">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="cmwlPort"><?= LangManager::translate("minecraft.servers.modal.add.cmwl_port") ?> :</label>
+                                        <div class="input-group">
+                                            <i class="fa-solid fa-door-open"></i>
+                                            <input type="number" id="cmwlPort" name="cmwlPort"
+                                                   placeholder="24102" value="<?= $server->getServerCMWLPort() ?>">
+                                        </div>
                                     </div>
                                 </div>
+                                <label for="status" class="mt-2"><?= LangManager::translate("minecraft.servers.status.title") ?></label>
+                                <select name="status" id="status">
+                                    <option value="-1" <?= $server->getServerStatus() === -1 ? "selected" : "" ?>>
+                                        <?= LangManager::translate("minecraft.servers.status.maintenance") ?>
+                                    </option>
+                                    <option value="0" <?= $server->getServerStatus() === 0 ? "selected" : "" ?>>
+                                        <?= LangManager::translate("minecraft.servers.status.offline") ?>
+                                    </option>
+                                    <option value="1" <?= $server->getServerStatus() === 1 ? "selected" : "" ?>>
+                                        <?= LangManager::translate("minecraft.servers.status.online") ?>
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" onclick="checkCMWLConfig(<?= $server->getServerId() ?>)"
+                                        class="btn-primary">
+                                    <?= LangManager::translate('minecraft.servers.test_cmwl') ?>
+                                </button>
+                                <button type="submit"
+                                        class="btn-primary"><?= LangManager::translate("core.btn.save") ?>
+                                </button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="modal-delete-<?= $server->getServerId() ?>" class="modal-container">
+                        <div class="modal">
+                            <div class="modal-header-danger">
+                                <h6><?= LangManager::translate("minecraft.servers.modal.delete") ?> <?= $server->getServerName() ?></h6>
+                                <button type="button" data-modal-hide="modal-delete-<?= $server->getServerId() ?>"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <div class="modal-body">
+                                <?= LangManager::translate("minecraft.servers.modal.deletealert") ?>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" action="servers/delete">
+                                    <?php (new SecurityManager())->insertHiddenToken() ?>
+                                    <input type="hidden" name="serverId" value="<?= $server->getServerId() ?>">
+                                    <button type="submit" class="btn-danger">
+                                        <?= LangManager::translate("core.btn.delete") ?>
+                                    </button>
+                                </form>
                             </div>
                         </div>
-                        <div class="modal fade text-left" id="delete-<?= $server->getServerId() ?>" tabindex="-1"
-                             role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-danger">
-                                        <h5 class="modal-title white"
-                                            id="myModalLabel160"><?= LangManager::translate("minecraft.servers.modal.delete") ?> <?= $server->getServerName() ?></h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?= LangManager::translate("minecraft.servers.modal.deletealert") ?>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                            <i class="bx bx-x d-block d-sm-none"></i>
-                                            <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
-                                        </button>
-                                        <form method="post" action="servers/delete">
-                                            <?php (new SecurityManager())->insertHiddenToken() ?>
-                                            <input type="hidden" name="serverId" value="<?= $server->getServerId() ?>">
-                                            <button type="submit" class="btn btn-danger ml-1" data-bs-dismiss="modal">
-                                                <i class="bx bx-check d-block d-sm-none"></i>
-                                                <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.delete") ?></span>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    </div>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
