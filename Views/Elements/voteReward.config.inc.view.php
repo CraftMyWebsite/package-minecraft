@@ -24,17 +24,17 @@ if (!is_null($rewardId)) {
     }
 }
 ?>
-<div class="mt-3 mb-3">
+<div class="mt-3">
     <div class="form-group">
         <label for="<?=$varName?>_commands">Commandes :</label>
-        <input value="<?=$cmd ?? ""?>" class="form-control" type="text" id="<?=$varName?>_commands" name="<?=$varName?>_commands" placeholder="say {player} is the best !" required>
+        <input value="<?=$cmd ?? ""?>" class="input" type="text" id="<?=$varName?>_commands" name="<?=$varName?>_commands" placeholder="say {player} is the best !" required>
     </div>
     <div class="form-group">
         <label for="<?=$varName?>_servers">Serveurs :</label>
-        <select id="<?=$varName?>_servers" name="<?=$varName?>_servers[]" class="form-control" required multiple>
+        <select id="<?=$varName?>_servers" name="<?=$varName?>_servers[]" class="input" required multiple>
         </select>
     </div>
-    <h6>A savoir.</h6>
+    <b>A savoir.</b>
     <p>- Séparez vos commandes avec un pipe : | (Alt Gr + 6) si vous souhaitez en exécuter plusieurs<br>
     - Ne pas utiliser "/" dans les commandes<br>
     - Utilisez {player} pour récupérez le nom du joueur qui vote.<br>
