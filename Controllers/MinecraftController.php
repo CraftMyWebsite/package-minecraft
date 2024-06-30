@@ -122,7 +122,7 @@ class MinecraftController extends AbstractController
             ->addStyle("App/Package/Minecraft/Views/Resources/Css/main.css")
             ->addScriptBefore("App/Package/Minecraft/Views/Resources/Js/main.js")
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/simple-datatables.js",
                 "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
     }
