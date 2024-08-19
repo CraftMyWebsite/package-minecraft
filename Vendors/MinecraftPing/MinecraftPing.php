@@ -86,7 +86,7 @@ class MinecraftPing
             return false;
         }
 
-        if($this->socket === false){
+        if ($this->socket === false) {
             return false;
         }
 
@@ -108,7 +108,7 @@ class MinecraftPing
 
     public function close(): void
     {
-        if ($this->socket !== null) {
+        if (is_resource($this->socket)) {
             fclose($this->socket);
 
             $this->socket = null;
@@ -161,9 +161,9 @@ class MinecraftPing
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new MinecraftPingException('JSON parsing failed: ' . json_last_error_msg());
         }
-        $playersEntity = array();
+        $playersEntity = [];
 
-        if(array_key_exists("sampler", $data['players'])) {
+        if (array_key_exists("sampler", $data['players'])) {
             foreach ($data['players']['sample'] as $iValue) {
                 $playersEntity[] = new MinecraftPingPlayersEntity($iValue['name'], $iValue['id']);
             }
@@ -210,14 +210,14 @@ class MinecraftPing
     public function queryOldPre17(): bool|array
     {
 
-        if (!$this->socket){
-            return array(
+        if (!$this->socket) {
+            return [
                 'HostName' => "",
                 'Players' => 0,
                 'MaxPlayers' => 0,
                 'Protocol' => 0,
-                'Version' => ""
-            );
+                'Version' => "",
+            ];
         }
 
         fwrite($this->socket, "\xFE\x01");
@@ -235,23 +235,23 @@ class MinecraftPing
         if ($Data[1] === "\xA7" && $Data[2] === "\x31") {
             $Data = explode("\x00", $Data);
 
-            return array(
+            return [
                 'HostName' => $Data[3],
                 'Players' => (int)$Data[4],
                 'MaxPlayers' => (int)$Data[5],
                 'Protocol' => (int)$Data[1],
-                'Version' => $Data[2]
-            );
+                'Version' => $Data[2],
+            ];
         }
 
         $Data = explode("\xA7", $Data);
 
-        return array(
+        return [
             'HostName' => substr($Data[0], 0, -1),
             'Players' => isset($Data[1]) ? (int)$Data[1] : 0,
             'MaxPlayers' => isset($Data[2]) ? (int)$Data[2] : 0,
             'Protocol' => 0,
-            'Version' => '1.3'
-        );
+            'Version' => '1.3',
+        ];
     }
 }
