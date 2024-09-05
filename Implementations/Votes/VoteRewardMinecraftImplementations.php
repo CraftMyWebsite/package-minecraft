@@ -7,6 +7,8 @@ use CMW\Entity\Votes\VotesRewardsEntity;
 use CMW\Entity\Votes\VotesSitesEntity;
 use CMW\Interface\Votes\IRewardMethod;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Filter\FilterManager;
+use CMW\Utils\Log;
 use JsonException;
 
 class VoteRewardMinecraftImplementations implements IRewardMethod
@@ -31,8 +33,8 @@ class VoteRewardMinecraftImplementations implements IRewardMethod
     {
         try {
             $action = json_encode([
-                "commands" => filter_input(INPUT_POST, $this->varName()."_commands"),
-                "servers" => $_POST[$this->varName().'_servers']
+                "commands" =>  $_POST[$this->varName() . '_commands'],
+                "servers" => $_POST[$this->varName() . '_servers'],
             ], JSON_THROW_ON_ERROR);
         } catch (JsonException) {
         }

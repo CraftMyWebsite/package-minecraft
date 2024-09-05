@@ -1,10 +1,11 @@
 <?php
 
 /* @var string $varName */
+
 /* @var ?int $rewardId */
 
-use CMW\Utils\Website;
 use CMW\Model\Votes\VotesRewardsModel;
+use CMW\Utils\Website;
 
 if (!is_null($rewardId)) {
     $reward = VotesRewardsModel::getInstance()->getRewardById($rewardId);
@@ -26,19 +27,32 @@ if (!is_null($rewardId)) {
 ?>
 <div class="mt-3">
     <div class="form-group">
-        <label for="<?=$varName?>_commands">Commandes :</label>
-        <input value="<?=$cmd ?? ""?>" class="input" type="text" id="<?=$varName?>_commands" name="<?=$varName?>_commands" placeholder="say {player} is the best !" required>
+        <div id="commands-wrapper">
+            <label for="<?= $varName ?>_commands">Commandes :</label>
+            <?php foreach ($cmd ?? [] as $command): ?>
+                <input value="<?= $command ?>" class="input" type="text"
+                       name="<?= $varName ?>_commands[]"
+                       placeholder="say {player} is the best !" required>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="text-center">
+            <button type="button" onclick="addCommand()">
+                <i class="fas fa-plus text-success"></i>
+            </button>
+        </div>
     </div>
     <div class="form-group">
-        <label for="<?=$varName?>_servers">Serveurs :</label>
-        <select id="<?=$varName?>_servers" name="<?=$varName?>_servers[]" class="input" required multiple>
+        <label for="<?= $varName ?>_servers">Serveurs :</label>
+        <select id="<?= $varName ?>_servers" name="<?= $varName ?>_servers[]" class="input" required multiple>
         </select>
     </div>
     <b>A savoir.</b>
-    <p>- Séparez vos commandes avec un pipe : | (Alt Gr + 6) si vous souhaitez en exécuter plusieurs<br>
-    - Ne pas utiliser "/" dans les commandes<br>
-    - Utilisez {player} pour récupérez le nom du joueur qui vote.<br>
-    - CTRL+CLIQUE pour sélectionner plusieurs serveurs</p>
+    <p>
+        - Ne pas utiliser "/" dans les commandes<br>
+        - Utilisez {player} pour récupérez le nom du joueur qui vote.<br>
+        - CTRL+CLIQUE pour sélectionner plusieurs serveurs
+    </p>
 </div>
 
 <script>
@@ -68,5 +82,20 @@ if (!is_null($rewardId)) {
         } catch (error) {
             console.error('Failed to fetch server list:', error);
         }
+    }
+</script>
+
+<script>
+    const addCommand = () => {
+        let wrapper = document.getElementById('commands-wrapper')
+
+        let input = document.createElement('input')
+        input.classList.add('input')
+        input.type = 'text'
+        input.name = '<?= $varName ?>_commands[]'
+        input.placeholder = "say {player} is the best !"
+        input.required = true
+
+        wrapper.appendChild(input)
     }
 </script>

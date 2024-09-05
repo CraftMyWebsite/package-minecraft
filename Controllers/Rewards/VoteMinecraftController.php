@@ -31,8 +31,7 @@ class VoteMinecraftController extends AbstractController
         $siteName = $site->getTitle();
         $userPseudo = UsersModel::getInstance()->getUserById($userId)?->getPseudo();
 
-        if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi())
-        {
+        if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi()) {
             $this->sendRewardsToCmwLink($rewardAction, $userPseudo);
             $this->sendVoteToCmwLink($rewardAction, $rewardTitle, $siteName, $userPseudo);
         } else {
@@ -46,11 +45,28 @@ class VoteMinecraftController extends AbstractController
             foreach (json_decode($rewardAction, false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
                 $server = MinecraftModel::getInstance()->getServerById($serverId);
 
-                $cmd = json_decode($rewardAction, false, 512, JSON_THROW_ON_ERROR)->commands;
-                $cmd = str_replace("{player}", $userPseudo, $cmd);
-                $cmd = base64_encode($cmd);
+                $commands = json_decode($rewardAction, false, 512, JSON_THROW_ON_ERROR)->commands;
 
-                echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$userPseudo/$cmd",
+                $formattedCommands = "";
+
+                //Split commands with pipes
+                foreach ($commands as $command) {
+                    $formattedCommands .= $command . "|";
+                }
+
+                //Remove last pipe
+                if ($formattedCommands[-1] === "|") {
+                    $formattedCommands = substr($formattedCommands, 0, -1);
+                }
+
+                //Replace {player} by the user pseudo
+                $formattedCommands = str_replace("{player}", $userPseudo, $formattedCommands);
+
+                //Encode the commands before sending to CMWLink
+                $formattedCommands = base64_encode($formattedCommands);
+
+                //Send the commands to the server
+                echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$userPseudo/$formattedCommands",
                     cmwlToken: $server?->getServerCMWToken());
             }
         } catch (JsonException $e) {
