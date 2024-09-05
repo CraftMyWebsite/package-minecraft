@@ -11,7 +11,7 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
+
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Manager\Router\Link;
 use CMW\Utils\Utils;
@@ -128,7 +128,7 @@ class MinecraftController extends AbstractController
     }
 
     #[Link("/servers/fav/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
-    private function adminServersFav(Request $request, int $serverId): void
+    private function adminServersFav(int $serverId): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.fav");
 
@@ -175,7 +175,7 @@ class MinecraftController extends AbstractController
      * @throws \JsonException
      */
     #[Link("/servers/cmwl/test/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/minecraft")]
-    private function checkCmwLConfig(Request $request, int $serverId): void
+    private function checkCmwLConfig(int $serverId): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "minecraft.edit");
 
