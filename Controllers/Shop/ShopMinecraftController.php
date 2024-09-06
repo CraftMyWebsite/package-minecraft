@@ -25,13 +25,13 @@ class ShopMinecraftController extends AbstractController
      */
     public function execMcNeeds(string $varName, ShopItemEntity $item, UserEntity $user): void
     {
-        $command = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName.'_commands',$item->getId());
+        $command = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName . '_commands', $item->getId());
         $userPseudo = $user->getPseudo();
         $servers = MinecraftModel::getInstance()->getServers();
 
         $activeServers = [];
         foreach ($servers as $server) {
-            $activeServer = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName.'_server'.$server->getServerId().'_',$item->getId());
+            $activeServer = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName . '_server' . $server->getServerId() . '_', $item->getId());
 
             $activeServers[] = $activeServer;
         }
@@ -41,21 +41,20 @@ class ShopMinecraftController extends AbstractController
                 if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi()) {
                     $this->sendItemsToCmwLink($serverSelected, $command, $userPseudo);
                 } else {
-                    //TODO @Teyir SEND MC NEEDS WITHOUT API
+                    // TODO @Teyir SEND MC NEEDS WITHOUT API
                 }
             }
-
         }
     }
 
-    private function sendItemsToCmwLink(int $serverId, string $command, string $userPseudo) :void
+    private function sendItemsToCmwLink(int $serverId, string $command, string $userPseudo): void
     {
         $serverEntity = MinecraftModel::getInstance()?->getServerById($serverId);
 
-        $command = str_replace("{player}", $userPseudo, $command);
+        $command = str_replace('{player}', $userPseudo, $command);
         $command = base64_encode($command);
 
-        //TODO : Change URL FOR SHOP !!
+        // TODO : Change URL FOR SHOP !!
         APIManager::getRequest("http://{$serverEntity?->getServerIp()}:{$serverEntity?->getServerCMWLPort()}/votes/send/reward/$userPseudo/$command",
             cmwlToken: $serverEntity?->getServerCMWToken());
     }

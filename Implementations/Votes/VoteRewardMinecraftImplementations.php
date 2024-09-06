@@ -15,26 +15,26 @@ class VoteRewardMinecraftImplementations implements IRewardMethod
 {
     public function name(): string
     {
-        return "Minecraft";
+        return 'Minecraft';
     }
 
     public function varName(): string
     {
-        return "minecraft";
+        return 'minecraft';
     }
 
     public function includeRewardConfigWidgets(?int $rewardId): void
     {
         $varName = $this->varName();
-        require_once EnvManager::getInstance()->getValue("DIR") . "App/Package/Minecraft/Views/Elements/voteReward.config.inc.view.php";
+        require_once EnvManager::getInstance()->getValue('DIR') . 'App/Package/Minecraft/Views/Elements/voteReward.config.inc.view.php';
     }
 
     public function execRewardActionLogic(): ?string
     {
         try {
             $action = json_encode([
-                "commands" =>  $_POST[$this->varName() . '_commands'],
-                "servers" => $_POST[$this->varName() . '_servers'],
+                'commands' => $_POST[$this->varName() . '_commands'],
+                'servers' => $_POST[$this->varName() . '_servers'],
             ], JSON_THROW_ON_ERROR);
         } catch (JsonException) {
         }

@@ -11,7 +11,6 @@ use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\VotesConfigModel;
 use JsonException;
 
-
 /**
  * Class: @VoteMinecraftController
  * @package Minecraft
@@ -35,7 +34,7 @@ class VoteMinecraftController extends AbstractController
             $this->sendRewardsToCmwLink($rewardAction, $userPseudo);
             $this->sendVoteToCmwLink($rewardAction, $rewardTitle, $siteName, $userPseudo);
         } else {
-            //TODO @Teyir SEND MC NEEDS WITHOUT API
+            // TODO @Teyir SEND MC NEEDS WITHOUT API
         }
     }
 
@@ -47,30 +46,30 @@ class VoteMinecraftController extends AbstractController
 
                 $commands = json_decode($rewardAction, false, 512, JSON_THROW_ON_ERROR)->commands;
 
-                $formattedCommands = "";
+                $formattedCommands = '';
 
-                //Split commands with pipes
+                // Split commands with pipes
                 foreach ($commands as $command) {
-                    $formattedCommands .= $command . "|";
+                    $formattedCommands .= $command . '|';
                 }
 
-                //Remove last pipe
-                if ($formattedCommands[-1] === "|") {
+                // Remove last pipe
+                if ($formattedCommands[-1] === '|') {
                     $formattedCommands = substr($formattedCommands, 0, -1);
                 }
 
-                //Replace {player} by the user pseudo
-                $formattedCommands = str_replace("{player}", $userPseudo, $formattedCommands);
+                // Replace {player} by the user pseudo
+                $formattedCommands = str_replace('{player}', $userPseudo, $formattedCommands);
 
-                //Encode the commands before sending to CMWLink
+                // Encode the commands before sending to CMWLink
                 $formattedCommands = base64_encode($formattedCommands);
 
-                //Send the commands to the server
+                // Send the commands to the server
                 echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$userPseudo/$formattedCommands",
                     cmwlToken: $server?->getServerCMWToken());
             }
         } catch (JsonException $e) {
-            echo "Internal Error. " . $e;
+            echo 'Internal Error. ' . $e;
         }
     }
 
@@ -87,7 +86,7 @@ class VoteMinecraftController extends AbstractController
                     cmwlToken: $server?->getServerCMWToken());
             }
         } catch (JsonException $e) {
-            echo "Internal Error. " . $e;
+            echo 'Internal Error. ' . $e;
         }
     }
 }

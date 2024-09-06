@@ -2,7 +2,6 @@
 
 namespace CMW\Entity\Minecraft;
 
-
 class MinecraftPingPlayersEntity
 {
     private ?string $name;
@@ -33,5 +32,4 @@ class MinecraftPingPlayersEntity
     {
         return $this->id;
     }
-
 }

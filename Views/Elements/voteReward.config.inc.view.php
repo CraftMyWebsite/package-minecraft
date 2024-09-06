@@ -21,7 +21,7 @@ if (!is_null($rewardId)) {
 
         $cmd = json_decode($action, false, 512, JSON_THROW_ON_ERROR)->commands;
     } catch (JsonException $e) {
-        echo "Internal Error. " . $e;
+        echo 'Internal Error. ' . $e;
     }
 }
 ?>
@@ -57,7 +57,7 @@ if (!is_null($rewardId)) {
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const selectElement = document.getElementById('<?=$varName?>_servers');
+        const selectElement = document.getElementById('<?= $varName ?>_servers');
         const selectedServers =
             <?php if (empty($jsonServers)) {
                 echo '[""]';

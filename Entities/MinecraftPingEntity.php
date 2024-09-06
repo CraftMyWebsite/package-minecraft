@@ -2,7 +2,6 @@
 
 namespace CMW\Entity\Minecraft;
 
-
 class MinecraftPingEntity
 {
     private ?string $versionProtocol;
@@ -11,7 +10,7 @@ class MinecraftPingEntity
     private int $playersMax;
     /** @var \CMW\Entity\Minecraft\MinecraftPingPlayersEntity|\CMW\Entity\Minecraft\MinecraftPingPlayersEntity[] $playersEntity */
     private ?array $playersEntity;
-    private ?string $favicon; //base64
+    private ?string $favicon;  // base64
 
     /**
      * @param ?string $versionProtocol

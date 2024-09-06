@@ -2,7 +2,6 @@
 
 namespace CMW\Entity\Minecraft;
 
-
 use CMW\Manager\Lang\LangManager;
 
 class MinecraftServerEntity
@@ -124,10 +123,9 @@ class MinecraftServerEntity
     public function showServerStatusFormatted(): string
     {
         return match ($this->serverStatus) {
-            1 => "<span class='text-success'>" . LangManager::translate("minecraft.servers.status.online") . "</span>",
-            0 => "<span class='text-danger'>" . LangManager::translate("minecraft.servers.status.offline") . "</span>",
-            -1 => "<span class='text-warning'>" . LangManager::translate("minecraft.servers.status.maintenance") . "</span>"
+            1 => "<span class='text-success'>" . LangManager::translate('minecraft.servers.status.online') . '</span>',
+            0 => "<span class='text-danger'>" . LangManager::translate('minecraft.servers.status.offline') . '</span>',
+            -1 => "<span class='text-warning'>" . LangManager::translate('minecraft.servers.status.maintenance') . '</span>'
         };
     }
-
 }

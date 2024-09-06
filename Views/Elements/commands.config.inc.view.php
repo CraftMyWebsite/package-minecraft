@@ -9,22 +9,22 @@ use CMW\Utils\Website;
 /* @var string $varName */
 
 $servers = minecraftModel::getInstance()->getServers();
-$command = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName.'_commands',$itemId);
+$command = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName . '_commands', $itemId);
 ?>
 <div class="">
     <div class="form-group">
-        <label for="<?=$varName?>_commands">Commandes :</label>
-        <input value="<?= $command ?>" class="input" type="text" id="<?=$varName?>_commands" name="<?=$varName?>_commands" placeholder="say {player} is the best !" required>
+        <label for="<?= $varName ?>_commands">Commandes :</label>
+        <input value="<?= $command ?>" class="input" type="text" id="<?= $varName ?>_commands" name="<?= $varName ?>_commands" placeholder="say {player} is the best !" required>
     </div>
     <div class="form-group">
         <b>Serveurs :</b><br>
         <?php foreach ($servers as $server):
-            $serverId = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName."_server".$server->getServerId()."_",$itemId); ?>
+            $serverId = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName . '_server' . $server->getServerId() . '_', $itemId); ?>
             <label class="toggle">
                 <p class="toggle-label"><?= $server->getServerName() ?></p>
                 <input type="checkbox" class="toggle-input" value="<?= $server->getServerId() ?>" name="<?= $varName ?>_server<?= $server->getServerId() ?>_"
 
-                <?= $server->getServerId() === (int)$serverId ? "checked" : "" ?>>
+                <?= $server->getServerId() === (int) $serverId ? 'checked' : '' ?>>
                 <div class="toggle-slider"></div>
             </label>
         <?php endforeach; ?>

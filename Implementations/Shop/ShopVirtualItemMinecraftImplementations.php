@@ -12,28 +12,28 @@ class ShopVirtualItemMinecraftImplementations implements IVirtualItems
 {
     public function name(): string
     {
-        return "Minecraft";
+        return 'Minecraft';
     }
 
     public function varName(): string
     {
-        return "minecraft";
+        return 'minecraft';
     }
 
     public function documentationURL(): ?string
     {
-        return "";
+        return '';
     }
 
     public function description(): string
     {
-        return "Executes des commandes en jeu quand vos joueurs achète un article";
+        return 'Executes des commandes en jeu quand vos joueurs achète un article';
     }
 
     public function includeItemConfigWidgets(?int $itemId): void
     {
         $varName = $this->varName();
-        require_once EnvManager::getInstance()->getValue("DIR") . "App/Package/Minecraft/Views/Elements/commands.config.inc.view.php";
+        require_once EnvManager::getInstance()->getValue('DIR') . 'App/Package/Minecraft/Views/Elements/commands.config.inc.view.php';
     }
 
     public function includeGlobalConfigWidgets(): void {}
@@ -52,5 +52,4 @@ class ShopVirtualItemMinecraftImplementations implements IVirtualItems
     {
         ShopMinecraftController::getInstance()->execMcNeeds($varName, $item, $user);
     }
-
 }

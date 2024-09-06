@@ -2,7 +2,6 @@
 
 namespace CMW\Model\Minecraft;
 
-
 use CMW\Entity\Minecraft\MinecraftServerEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
@@ -15,13 +14,12 @@ use CMW\Manager\Package\AbstractModel;
  */
 class MinecraftModel extends AbstractModel
 {
-
     /**
      * @return MinecraftServerEntity[] array
      */
     public function getServers(): array
     {
-        $sql = "SELECT * FROM cmw_minecraft_servers";
+        $sql = 'SELECT * FROM cmw_minecraft_servers';
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
@@ -39,15 +37,15 @@ class MinecraftModel extends AbstractModel
 
     public function getServerById(int $id): ?MinecraftServerEntity
     {
-        $sql = "SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, minecraft_server_cmwl_port,
+        $sql = 'SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, minecraft_server_cmwl_port,
                  minecraft_server_cmwl_token, minecraft_server_status, minecraft_server_last_update, minecraft_server_is_fav
-                FROM cmw_minecraft_servers WHERE minecraft_server_id = :server_id";
+                FROM cmw_minecraft_servers WHERE minecraft_server_id = :server_id';
 
         $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
-        if (!$res->execute(array("server_id" => $id))) {
+        if (!$res->execute(array('server_id' => $id))) {
             return null;
         }
 
@@ -69,16 +67,16 @@ class MinecraftModel extends AbstractModel
     public function addServer(string $serverName, string $serverIp, int $serverStatus, int|null $serverPort = null, int|null $cmwlPort = null): ?MinecraftServerEntity
     {
         $var = array(
-            "name" => $serverName,
-            "ip" => $serverIp,
-            "port" => $serverPort ?? null,
-            "cmwlPort" => $cmwlPort ?? null,
-            "status" => $serverStatus
+            'name' => $serverName,
+            'ip' => $serverIp,
+            'port' => $serverPort ?? null,
+            'cmwlPort' => $cmwlPort ?? null,
+            'status' => $serverStatus
         );
 
-        $sql = "INSERT INTO cmw_minecraft_servers (minecraft_server_name, minecraft_server_ip, minecraft_server_port, 
+        $sql = 'INSERT INTO cmw_minecraft_servers (minecraft_server_name, minecraft_server_ip, minecraft_server_port, 
                                                     minecraft_server_cmwl_port, minecraft_server_status)
-                VALUES (:name, :ip, :port, :cmwlPort, :status)";
+                VALUES (:name, :ip, :port, :cmwlPort, :status)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -93,11 +91,11 @@ class MinecraftModel extends AbstractModel
     public function setServerToken(int $serverId, string $token): void
     {
         $var = [
-            "server_id" => $serverId,
-            "server_token" => $token
+            'server_id' => $serverId,
+            'server_token' => $token
         ];
 
-        $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_cmwl_token = :server_token WHERE minecraft_server_id = :server_id";
+        $sql = 'UPDATE cmw_minecraft_servers SET minecraft_server_cmwl_token = :server_token WHERE minecraft_server_id = :server_id';
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
@@ -108,17 +106,17 @@ class MinecraftModel extends AbstractModel
     public function updateServer(int $id, string $name, string $ip, int $serverStatus, int|null $port = null, int|null $cmwlPort = null): ?MinecraftServerEntity
     {
         $var = array(
-            "id" => $id,
-            "name" => $name,
-            "ip" => $ip,
-            "port" => $port ?? null,
-            "cmwlPort" => $cmwlPort ?? null,
-            "status" => $serverStatus
+            'id' => $id,
+            'name' => $name,
+            'ip' => $ip,
+            'port' => $port ?? null,
+            'cmwlPort' => $cmwlPort ?? null,
+            'status' => $serverStatus
         );
 
-        $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_name = :name, minecraft_server_ip = :ip, 
+        $sql = 'UPDATE cmw_minecraft_servers SET minecraft_server_name = :name, minecraft_server_ip = :ip, 
                                 minecraft_server_port = :port, minecraft_server_cmwl_port = :cmwlPort, minecraft_server_status = :status
-                                WHERE minecraft_server_id = :id";
+                                WHERE minecraft_server_id = :id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -131,10 +129,10 @@ class MinecraftModel extends AbstractModel
 
     public function deleteServer(int $id): void
     {
-        $sql = "DELETE FROM cmw_minecraft_servers WHERE minecraft_server_id = :id";
+        $sql = 'DELETE FROM cmw_minecraft_servers WHERE minecraft_server_id = :id';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id));
+        $req->execute(array('id' => $id));
     }
 
     /**
@@ -147,12 +145,12 @@ class MinecraftModel extends AbstractModel
         if (!$this->isAlreadyFav($serverId)) {
             $this->deleteFavs();
 
-            $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_is_fav = 1 WHERE minecraft_server_id = :id";
+            $sql = 'UPDATE cmw_minecraft_servers SET minecraft_server_is_fav = 1 WHERE minecraft_server_id = :id';
 
             $db = DatabaseManager::getInstance();
             $req = $db->prepare($sql);
 
-            $req->execute(array("id" => $serverId));
+            $req->execute(array('id' => $serverId));
         } else {
             $this->deleteFavs();
         }
@@ -160,7 +158,7 @@ class MinecraftModel extends AbstractModel
 
     public function favExist(): bool
     {
-        $sql = "SELECT minecraft_server_is_fav AS `fav` FROM cmw_minecraft_servers WHERE minecraft_server_is_fav = 1";
+        $sql = 'SELECT minecraft_server_is_fav AS `fav` FROM cmw_minecraft_servers WHERE minecraft_server_is_fav = 1';
 
         $db = DatabaseManager::getInstance();
         $req = $db->query($sql);
@@ -170,12 +168,12 @@ class MinecraftModel extends AbstractModel
 
     public function isAlreadyFav(int $serverId): bool
     {
-        $sql = "SELECT minecraft_server_is_fav AS `fav` FROM cmw_minecraft_servers WHERE minecraft_server_id = :id";
+        $sql = 'SELECT minecraft_server_is_fav AS `fav` FROM cmw_minecraft_servers WHERE minecraft_server_id = :id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        $req->execute(array("id" => $serverId));
+        $req->execute(array('id' => $serverId));
 
         $res = $req->fetch()['fav'];
 
@@ -184,7 +182,7 @@ class MinecraftModel extends AbstractModel
 
     private function deleteFavs(): void
     {
-        $sql = "UPDATE cmw_minecraft_servers SET minecraft_server_is_fav = 0 WHERE minecraft_server_is_fav = 1";
+        $sql = 'UPDATE cmw_minecraft_servers SET minecraft_server_is_fav = 0 WHERE minecraft_server_is_fav = 1';
 
         $db = DatabaseManager::getInstance();
         $db->query($sql);
@@ -192,7 +190,7 @@ class MinecraftModel extends AbstractModel
 
     public function getFavServer(): ?MinecraftServerEntity
     {
-        $sql = "SELECT * FROM cmw_minecraft_servers WHERE minecraft_server_is_fav = 1 LIMIT 1";
+        $sql = 'SELECT * FROM cmw_minecraft_servers WHERE minecraft_server_is_fav = 1 LIMIT 1';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -215,5 +213,4 @@ class MinecraftModel extends AbstractModel
             $res['minecraft_server_is_fav'],
         );
     }
-
 }
