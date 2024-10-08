@@ -15,7 +15,7 @@ use CMW\Model\Votes\VotesConfigModel;
  * Class: @ShopMinecraftController
  * @package Shop
  * @author Zomblard
- * @version 1.0
+ * @version 0.0.1
  */
 class ShopMinecraftController extends AbstractController
 {

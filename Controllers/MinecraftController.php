@@ -27,7 +27,7 @@ require_once (EnvManager::getInstance()->getValue('DIR') . 'App/Package/Minecraf
  * Class: @MinecraftController
  * @package Minecraft
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
- * @version 1.0
+ * @version 0.0.1
  */
 class MinecraftController extends AbstractController
 {

@@ -15,7 +15,7 @@ use JsonException;
  * Class: @VoteMinecraftController
  * @package Minecraft
  * @author Zomblard
- * @version 1.0
+ * @version 0.0.1
  */
 class VoteMinecraftController extends AbstractController
 {
