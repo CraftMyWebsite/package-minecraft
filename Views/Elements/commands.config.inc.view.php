@@ -20,13 +20,14 @@ $command = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName 
         <b>Serveurs :</b><br>
         <?php foreach ($servers as $server):
             $serverId = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName . '_server' . $server->getServerId() . '_', $itemId); ?>
+        <div>
             <label class="toggle">
-                <p class="toggle-label"><?= $server->getServerName() ?></p>
+                <p class="toggle-label"><?= $server->getServerName() ?> - <?= $server->getFormattedServerCMLStatus() ?> <?= $server->getServerCMLStatus() ? '' : 'CMW - Link Inactif !' ?></p>
                 <input type="checkbox" class="toggle-input" value="<?= $server->getServerId() ?>" name="<?= $varName ?>_server<?= $server->getServerId() ?>_"
-
-                <?= $server->getServerId() === (int) $serverId ? 'checked' : '' ?>>
+                    <?= $server->getServerId() === (int) $serverId ? 'checked' : '' ?>>
                 <div class="toggle-slider"></div>
             </label>
+        </div>
         <?php endforeach; ?>
     </div>
     <hr>

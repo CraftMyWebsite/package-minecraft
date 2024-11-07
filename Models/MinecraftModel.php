@@ -2,6 +2,7 @@
 
 namespace CMW\Model\Minecraft;
 
+use CMW\Controller\Minecraft\MinecraftController;
 use CMW\Entity\Minecraft\MinecraftServerEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
@@ -37,9 +38,7 @@ class MinecraftModel extends AbstractModel
 
     public function getServerById(int $id): ?MinecraftServerEntity
     {
-        $sql = 'SELECT minecraft_server_id, minecraft_server_name, minecraft_server_ip, minecraft_server_port, minecraft_server_cmwl_port,
-                 minecraft_server_cmwl_token, minecraft_server_status, minecraft_server_last_update, minecraft_server_is_fav
-                FROM cmw_minecraft_servers WHERE minecraft_server_id = :server_id';
+        $sql = 'SELECT * FROM cmw_minecraft_servers WHERE minecraft_server_id = :server_id';
 
         $db = DatabaseManager::getInstance();
 
@@ -58,6 +57,7 @@ class MinecraftModel extends AbstractModel
             $res['minecraft_server_port'] ?? null,
             $res['minecraft_server_cmwl_port'] ?? null,
             $res['minecraft_server_cmwl_token'] ?? null,
+            $res['minecraft_server_cmwl_status'] ?? null,
             $res['minecraft_server_last_update'],
             $res['minecraft_server_status'],
             $res['minecraft_server_is_fav'],
@@ -83,6 +83,12 @@ class MinecraftModel extends AbstractModel
 
         if ($req->execute($var)) {
             $id = $db->lastInsertId();
+            $status = MinecraftController::getInstance()->checkCmwLConfig($id);
+            if ($status) {
+                $this->setCMWLStatus($id, 1);
+            } else {
+                $this->setCMWLStatus($id, 0);
+            }
             return $this->getServerById($id);
         }
         return null;
@@ -122,6 +128,12 @@ class MinecraftModel extends AbstractModel
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
+            $status = MinecraftController::getInstance()->checkCmwLConfig($id);
+            if ($status) {
+                $this->setCMWLStatus($id, 1);
+            } else {
+                $this->setCMWLStatus($id, 0);
+            }
             return $this->getServerById($id);
         }
         return null;
@@ -208,9 +220,25 @@ class MinecraftModel extends AbstractModel
             $res['minecraft_server_port'] ?? null,
             $res['minecraft_server_cmwl_port'] ?? null,
             $res['minecraft_server_cmwl_token'] ?? null,
+            $res['minecraft_server_cmwl_status'] ?? null,
             $res['minecraft_server_last_update'],
             $res['minecraft_server_status'],
             $res['minecraft_server_is_fav'],
         );
+    }
+
+    public function setCMWLStatus(int $serverId, int $status): void
+    {
+        $var = [
+            'server_id' => $serverId,
+            'minecraft_server_cmwl_status' => $status
+        ];
+
+        $sql = 'UPDATE cmw_minecraft_servers SET minecraft_server_cmwl_status = :minecraft_server_cmwl_status WHERE minecraft_server_id = :server_id';
+        $db = DatabaseManager::getInstance();
+
+        $req = $db->prepare($sql);
+
+        $req->execute($var);
     }
 }

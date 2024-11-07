@@ -12,6 +12,7 @@ class MinecraftServerEntity
     private ?int $serverPort;
     private ?int $serverCMWLPort;
     private ?string $serverCMWToken;
+    private ?int $serverCMLStatus;
     private string $serverLastUpdate;
     private int $serverStatus;
     private int $isServerFav;
@@ -23,11 +24,12 @@ class MinecraftServerEntity
      * @param int|null $serverPort
      * @param int|null $serverCMWLPort
      * @param string|null $serverCMWToken
+     * @param int|null $serverCMLStatus;
      * @param string $serverLastUpdate
      * @param int $serverStatus
      * @param int $isServerFav
      */
-    public function __construct(int $serverId, string $serverName, string $serverIp, ?int $serverPort, ?int $serverCMWLPort, ?string $serverCMWToken, string $serverLastUpdate, int $serverStatus, int $isServerFav)
+    public function __construct(int $serverId, string $serverName, string $serverIp, ?int $serverPort, ?int $serverCMWLPort, ?string $serverCMWToken, ?int $serverCMLStatus, string $serverLastUpdate, int $serverStatus, int $isServerFav)
     {
         $this->serverId = $serverId;
         $this->serverName = $serverName;
@@ -35,6 +37,7 @@ class MinecraftServerEntity
         $this->serverPort = $serverPort;
         $this->serverCMWLPort = $serverCMWLPort;
         $this->serverCMWToken = $serverCMWToken;
+        $this->serverCMLStatus = $serverCMLStatus;
         $this->serverLastUpdate = $serverLastUpdate;
         $this->serverStatus = $serverStatus;
         $this->isServerFav = $isServerFav;
@@ -94,6 +97,26 @@ class MinecraftServerEntity
     public function getServerCMWToken(): ?string
     {
         return $this->serverCMWToken;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getServerCMLStatus(): ?int
+    {
+        return $this->serverCMLStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormattedServerCMLStatus(): string
+    {
+        if ($this->serverCMLStatus == 0) {
+            return '<i class="fa-solid fa-xmark fa-xl fa-beat" style="color: #bd1425;"></i>';
+        } else {
+            return '<i class="fa-solid fa-check fa-xl fa-beat" style="color: #31c913;"></i>';
+        }
     }
 
     /**

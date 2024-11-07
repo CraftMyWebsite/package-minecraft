@@ -11,7 +11,11 @@ $description = LangManager::translate('minecraft.servers.desc');
 /* @var MinecraftServerEntity[] $servers */
 ?>
 
-<h3><i class="fas fa-cube"></i> Minecraft</h3>
+<div class="page-title">
+    <h3><i class="fas fa-cube"></i> Minecraft</h3>
+    <a href="https://craftmywebsite.fr/market/details/cmw-link" target="_blank" class="btn-primary">Télécharger CMW-Link</a>
+</div>
+
 
 <div class="grid-3">
     <div class="card">
@@ -51,15 +55,13 @@ $description = LangManager::translate('minecraft.servers.desc');
                 <option value="0"><?= LangManager::translate('minecraft.servers.status.offline') ?></option>
                 <option value="1"><?= LangManager::translate('minecraft.servers.status.online') ?></option>
             </select>
-            <button type="submit" class="btn-primary btn-center mt-3">
-                <?= LangManager::translate('core.btn.add') ?>
-            </button>
+            <button type="submit" class="btn-primary btn-center loading-btn mt-3" data-loading-btn="<?= LangManager::translate('core.btn.add') ?>..."><?= LangManager::translate('core.btn.add') ?></button>
         </form>
     </div>
     <div class="card col-span-2">
         <h6><?= LangManager::translate('minecraft.servers.list.title') ?></h6>
         <div class="table-container">
-            <table>
+            <table id="table1">
                 <thead>
                 <tr>
                     <th><?= LangManager::translate('minecraft.servers.list.fav') ?></th>
@@ -67,6 +69,8 @@ $description = LangManager::translate('minecraft.servers.desc');
                     <th><?= LangManager::translate('minecraft.servers.list.players') ?></th>
                     <th><?= LangManager::translate('minecraft.servers.list.ip') ?></th>
                     <th><?= LangManager::translate('minecraft.servers.list.state') ?></th>
+                    <th class="text-center">CMW Link</th>
+                    <th class="text-center">CMW PORT</th>
                     <th class="text-center"><?= LangManager::translate('minecraft.servers.list.action') ?></th>
                 </tr>
                 </thead>
@@ -91,7 +95,14 @@ $description = LangManager::translate('minecraft.servers.desc');
                         <td>
                             <?= $server->showServerStatusFormatted() ?>
                         </td>
+                        <td class="text-center">
+                            <?= $server->getFormattedServerCMLStatus() ?>
+                        </td>
+                        <td class="text-center">
+                            <b><?= $server->getServerCMWLPort() ?></b>
+                        </td>
                         <td class="text-center space-x-2">
+                            <a onclick="showLoadingIcon(this); return true;" href="servers/cmwl/test/<?= $server->getServerId() ?>" ><i class="fa-solid fa-link text-success"></i></a>
                             <button data-modal-toggle="modal-edit-<?= $server->getServerId() ?>" type="button"><i class="text-info fas fa-edit"></i></button>
                             <button data-modal-toggle="modal-delete-<?= $server->getServerId() ?>" type="button"><i class="text-danger fas fa-trash-alt"></i></button>
                         </td>
@@ -158,10 +169,6 @@ $description = LangManager::translate('minecraft.servers.desc');
                                 </select>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" onclick="checkCMWLConfig(<?= $server->getServerId() ?>)"
-                                        class="btn-primary">
-                                    <?= LangManager::translate('minecraft.servers.test_cmwl') ?>
-                                </button>
                                 <button type="submit"
                                         class="btn-primary"><?= LangManager::translate('core.btn.save') ?>
                                 </button>
@@ -195,3 +202,9 @@ $description = LangManager::translate('minecraft.servers.desc');
         </div>
     </div>
 </div>
+
+<script>
+    function showLoadingIcon(element) {
+        element.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    }
+</script>

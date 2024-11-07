@@ -72,10 +72,11 @@ if (!is_null($rewardId)) {
             let response = await fetch('<?= Website::getUrl() ?>cmw-admin/minecraft/servers/list');
             let jsonData = await response.json();
 
-            for (const [serverId, serverName] of Object.entries(jsonData)) {
+            for (const [serverId, serverData] of Object.entries(jsonData)) {
                 let option = document.createElement("option");
                 option.value = serverId;
-                option.innerText = serverName;
+                const compatibilityStatus = serverData.CMWLStatus === 1 ? '' : ' : CMW - Link Inactif !';
+                option.innerText = `${serverData.name} ${compatibilityStatus}`;
                 option.selected = servers.includes(serverId);
                 select_server.appendChild(option);
             }
