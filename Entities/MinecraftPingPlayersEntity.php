@@ -2,7 +2,9 @@
 
 namespace CMW\Entity\Minecraft;
 
-class MinecraftPingPlayersEntity
+use CMW\Manager\Package\AbstractEntity;
+
+class MinecraftPingPlayersEntity extends AbstractEntity
 {
     private ?string $name;
     private ?string $id;

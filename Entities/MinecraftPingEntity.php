@@ -2,13 +2,15 @@
 
 namespace CMW\Entity\Minecraft;
 
-class MinecraftPingEntity
+use CMW\Manager\Package\AbstractEntity;
+
+class MinecraftPingEntity extends AbstractEntity
 {
     private ?string $versionProtocol;
     private ?string $versionName;
     private int $playersOnline;
     private int $playersMax;
-    /** @var \CMW\Entity\Minecraft\MinecraftPingPlayersEntity|\CMW\Entity\Minecraft\MinecraftPingPlayersEntity[] $playersEntity */
+    /** @var MinecraftPingPlayersEntity|MinecraftPingPlayersEntity[] $playersEntity */
     private ?array $playersEntity;
     private ?string $favicon;  // base64
 
@@ -17,7 +19,7 @@ class MinecraftPingEntity
      * @param ?string $versionName
      * @param int $playersOnline
      * @param int $playersMax
-     * @param \CMW\Entity\Minecraft\MinecraftPingPlayersEntity[]|null $playersEntity
+     * @param MinecraftPingPlayersEntity[]|null $playersEntity
      * @param ?string $favicon
      */
     public function __construct(?string $versionProtocol, ?string $versionName, int $playersOnline, int $playersMax, ?array $playersEntity, ?string $favicon)
@@ -63,7 +65,7 @@ class MinecraftPingEntity
     }
 
     /**
-     * @return \CMW\Entity\Minecraft\MinecraftPingPlayersEntity[]|null
+     * @return MinecraftPingPlayersEntity[]|null
      */
     public function getPlayersEntity(): ?array
     {
