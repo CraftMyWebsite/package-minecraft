@@ -21,7 +21,7 @@ $description = LangManager::translate('minecraft.servers.desc');
     <div class="card">
         <h6><?= LangManager::translate('minecraft.servers.modal.add.title') ?></h6>
         <form method="post" action="servers/add">
-            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
             <label for="name"><?= LangManager::translate('minecraft.servers.modal.add.name') ?> :</label>
             <div class="input-group">
                 <i class="fas fa-heading"></i>
@@ -115,7 +115,7 @@ $description = LangManager::translate('minecraft.servers.desc');
                                 <button type="button" data-modal-hide="modal-edit-<?= $server->getServerId() ?>"><i class="fa-solid fa-xmark"></i></button>
                             </div>
                             <form id="serveredit-<?= $server->getServerId() ?>" method="post" action="">
-                                <?php (new SecurityManager())->insertHiddenToken() ?>
+                                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                             <div class="modal-body">
                                 <div class="grid-2">
                                     <div>
@@ -187,7 +187,7 @@ $description = LangManager::translate('minecraft.servers.desc');
                             </div>
                             <div class="modal-footer">
                                 <form method="post" action="servers/delete">
-                                    <?php (new SecurityManager())->insertHiddenToken() ?>
+                                    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                                     <input type="hidden" name="serverId" value="<?= $server->getServerId() ?>">
                                     <button type="submit" class="btn-danger">
                                         <?= LangManager::translate('core.btn.delete') ?>
