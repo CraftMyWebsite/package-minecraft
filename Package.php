@@ -39,8 +39,7 @@ class Package implements IPackageConfig
                 icon: 'fas fa-cube',
                 title: 'Minecraft',
                 url: 'minecraft/servers',
-                permission: 'minecraft.list',
-                subMenus: []
+                permission: 'minecraft.list'
             ),
         ];
     }
