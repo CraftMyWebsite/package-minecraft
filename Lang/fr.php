@@ -4,6 +4,7 @@ return [
     'servers' => [
         'title' => 'Gérez vos serveurs',
         'desc' => 'Gérez vos serveurs Minecraft',
+        'download' => 'Télécharger le plugin CMW-Link',
         'modal' => [
             'editing' => 'Édition de :',
             'delete' => 'Supression de :',
@@ -60,6 +61,20 @@ return [
                 'add' => 'Ajouter',
                 'edit' => 'Modifier',
             ],
+        ],
+    ],
+    'implementations' => [
+        'shop' => [
+            'desc' => 'Executes des commandes en jeu quand vos joueurs achète un article',
+            'commands' => 'Commandes :',
+            'server' => 'Serveurs :',
+            'link-down' => 'CMW - Link Inactif !',
+            'know' => '<b>A savoir.</b><p>- Séparez vos commandes avec un pipe : | (Alt Gr + 6) si vous souhaitez en exécuter plusieurs<br>- Ne pas utiliser "/" dans les commandes<br>- Utilisez {player} pour récupérer le nom du joueur.<br></p>',
+        ],
+        'votes' => [
+            'commands' => 'Commandes :',
+            'server' => 'Serveurs :',
+            'know' => '<b>A savoir.</b><p>- Ne pas utiliser "/" dans les commandes<br>- Utilisez {player} pour récupérer le nom du joueur.<br>- CTRL+CLIQUE pour sélectionner plusieurs serveurs</p>',
         ],
     ],
 ];

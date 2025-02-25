@@ -4,6 +4,7 @@
 
 /* @var ?int $rewardId */
 
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Votes\VotesRewardsModel;
 use CMW\Utils\Website;
 
@@ -28,7 +29,7 @@ if (!is_null($rewardId)) {
 <div class="mt-3">
     <div class="form-group">
         <div id="commands-wrapper">
-            <label for="<?= $varName ?>_commands">Commandes :</label>
+            <label for="<?= $varName ?>_commands"><?= LangManager::translate('minecraft.implementations.votes.commands') ?></label>
             <?php foreach ($cmd ?? [] as $command): ?>
                 <input value="<?= $command ?>" class="input" type="text"
                        name="<?= $varName ?>_commands[]"
@@ -43,16 +44,11 @@ if (!is_null($rewardId)) {
         </div>
     </div>
     <div class="form-group">
-        <label for="<?= $varName ?>_servers">Serveurs :</label>
+        <label for="<?= $varName ?>_servers"><?= LangManager::translate('minecraft.implementations.votes.server') ?></label>
         <select id="<?= $varName ?>_servers" name="<?= $varName ?>_servers[]" class="input" required multiple>
         </select>
     </div>
-    <b>A savoir.</b>
-    <p>
-        - Ne pas utiliser "/" dans les commandes<br>
-        - Utilisez {player} pour récupérez le nom du joueur qui vote.<br>
-        - CTRL+CLIQUE pour sélectionner plusieurs serveurs
-    </p>
+    <?= LangManager::translate('minecraft.implementations.votes.know') ?>
 </div>
 
 <script>

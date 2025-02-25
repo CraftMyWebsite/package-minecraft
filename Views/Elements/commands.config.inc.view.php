@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Controller\Core\PackageController;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Shop\Item\ShopItemsVirtualRequirementModel;
 use CMW\Utils\Website;
@@ -13,16 +14,16 @@ $command = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName 
 ?>
 <div class="">
     <div class="form-group">
-        <label for="<?= $varName ?>_commands">Commandes :</label>
+        <label for="<?= $varName ?>_commands"><?= LangManager::translate('minecraft.implementations.shop.commands') ?></label>
         <input value="<?= $command ?>" class="input" type="text" id="<?= $varName ?>_commands" name="<?= $varName ?>_commands" placeholder="say {player} is the best !" required>
     </div>
     <div class="form-group">
-        <b>Serveurs :</b><br>
+        <b><?= LangManager::translate('minecraft.implementations.shop.server') ?></b><br>
         <?php foreach ($servers as $server):
             $serverId = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName . '_server' . $server->getServerId() . '_', $itemId); ?>
         <div>
             <label class="toggle">
-                <p class="toggle-label"><?= $server->getServerName() ?> - <?= $server->getFormattedServerCMLStatus() ?> <?= $server->getServerCMLStatus() ? '' : 'CMW - Link Inactif !' ?></p>
+                <p class="toggle-label"><?= $server->getServerName() ?> - <?= $server->getFormattedServerCMLStatus() ?> <?= $server->getServerCMLStatus() ? '' : LangManager::translate('minecraft.implementations.shop.link-down') ?></p>
                 <input type="checkbox" class="toggle-input" value="<?= $server->getServerId() ?>" name="<?= $varName ?>_server<?= $server->getServerId() ?>_"
                     <?= $server->getServerId() === (int) $serverId ? 'checked' : '' ?>>
                 <div class="toggle-slider"></div>
@@ -31,9 +32,5 @@ $command = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName 
         <?php endforeach; ?>
     </div>
     <hr>
-    <b>A savoir.</b>
-    <p>- Séparez vos commandes avec un pipe : | (Alt Gr + 6) si vous souhaitez en exécuter plusieurs<br>
-        - Ne pas utiliser "/" dans les commandes<br>
-        - Utilisez {player} pour récupérez le nom du joueur qui vote.<br>
-        - CTRL+CLIQUE pour sélectionner plusieurs serveurs</p>
+    <?= LangManager::translate('minecraft.implementations.shop.know') ?>
 </div>

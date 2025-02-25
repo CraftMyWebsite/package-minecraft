@@ -7,6 +7,7 @@ use CMW\Entity\Shop\Items\ShopItemEntity;
 use CMW\Entity\Users\UserEntity;
 use CMW\Interface\Shop\IVirtualItems;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Lang\LangManager;
 
 class ShopVirtualItemMinecraftImplementations implements IVirtualItems
 {
@@ -27,7 +28,7 @@ class ShopVirtualItemMinecraftImplementations implements IVirtualItems
 
     public function description(): string
     {
-        return 'Executes des commandes en jeu quand vos joueurs achète un article';
+        return LangManager::translate('minecraft.implementations.shop.desc');
     }
 
     public function includeItemConfigWidgets(?int $itemId): void

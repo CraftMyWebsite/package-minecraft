@@ -4,6 +4,7 @@ return [
     'servers' => [
         'title' => 'Manage your servers',
         'desc' => 'Manage your minecraftservers',
+        'download' => 'Download CMW-Link plugin',
         'modal' => [
             'editing' => 'Editing :',
             'delete' => 'Delete :',
@@ -28,7 +29,7 @@ return [
         ],
         'add' => 'Add a server',
         'test_cmwl' => 'Try CMW Link config',
-        'hint_cmwl_port' => "Si vous n'avez pas d'autres ports de libre, utilisez le port par défaut de votre serveur, et pensez à activer l'option \"bindToDefaultPort\" dans votre fichier settings.json du plugin CMWLink",
+        'hint_cmwl_port' => "If you have no other free ports, use your server's default port and make sure to enable the bindToDefaultPort option in your settings.json file of the CMWLink plugin.",
         'status' => [
             'title' => 'Status of this server',
             'maintenance' => 'Maintenance',
@@ -60,6 +61,20 @@ return [
                 'add' => 'Add',
                 'edit' => 'Edit',
             ],
+        ],
+    ],
+    'implementations' => [
+        'shop' => [
+            'desc' => 'Executes in-game commands when your players purchase an item',
+            'commands' => 'Commands:',
+            'server' => 'Servers:',
+            'link-down' => 'CMW - Link Inactive!',
+            'know' => '<b>Important Information.</b><p>- Separate your commands with a pipe: | (Alt Gr + 6) if you want to execute multiple commands<br>- Do not use "/" in the commands<br>- Use {player} to retrieve the player\'s name.<br></p>',
+        ],
+        'votes' => [
+            'commands' => 'Commands:',
+            'server' => 'Servers:',
+            'know' => '<b>Important Information.</b><p>- Do not use "/" in the commands<br>- Use {player} to retrieve the player\'s name.<br>- CTRL+CLICK to select multiple servers</p>',
         ],
     ],
 ];
