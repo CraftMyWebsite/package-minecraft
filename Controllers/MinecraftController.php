@@ -16,7 +16,6 @@ use CMW\Manager\Views\View;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
-use CMW\Utils\Website;
 use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
 use JsonException;

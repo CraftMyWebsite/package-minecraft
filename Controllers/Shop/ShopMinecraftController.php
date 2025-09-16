@@ -11,7 +11,6 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Shop\Item\ShopItemsVirtualRequirementModel;
-use CMW\Model\Votes\VotesConfigModel;
 use function base64_encode;
 use function is_null;
 
@@ -42,11 +41,7 @@ class ShopMinecraftController extends AbstractController
 
         foreach ($activeServers as $serverSelected) {
             if (!is_null($serverSelected)) {
-                if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi()) {
-                    $this->sendItemsToCmwLink($serverSelected, $command, $userPseudo, $item->getName());
-                } else {
-                    // TODO @Teyir SEND MC NEEDS WITHOUT API
-                }
+                $this->sendItemsToCmwLink($serverSelected, $command, $userPseudo, $item->getName());
             }
         }
     }
