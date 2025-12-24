@@ -72,6 +72,6 @@ class Package implements IPackageConfigV2
 
     public function compatiblesPackages(): array
     {
-        return ['Votes', 'Shop', 'Litebans'];
+        return ['Votes', 'Shop'];
     }
 }
