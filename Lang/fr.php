@@ -8,7 +8,7 @@ return [
         'modal' => [
             'editing' => 'Édition de :',
             'delete' => 'Supression de :',
-            'deletealert' => 'La suppression de votre serveur est définitive',
+            'deletealert' => 'La suppression de votre serveur est définitive.<br>Si CMW-Link était actif, vous devrez supprimer le fichier settings.json dans votre plugin afin de pouvoir recréer un nouveau lien.',
             'add' => [
                 'title' => 'Ajouter un nouveau serveur',
                 'name' => 'Nom de votre serveur',
@@ -61,6 +61,7 @@ return [
                 'add' => 'Ajouter',
                 'edit' => 'Modifier',
             ],
+            'history' => 'Consulter l\'historique',
         ],
     ],
     'implementations' => [
@@ -76,5 +77,10 @@ return [
             'server' => 'Serveurs :',
             'know' => '<b>A savoir.</b><p>- Ne pas utiliser "/" dans les commandes<br>- Utilisez {player} pour récupérer le nom du joueur.<br>- CTRL+CLIQUE pour sélectionner plusieurs serveurs</p>',
         ],
+    ],
+    'menu' => [
+        'servers' => 'Gestion des serveurs',
+        'history' => 'Historique des récompenses',
+        'public' => 'Historique utilisateur des récompenses',
     ],
 ];

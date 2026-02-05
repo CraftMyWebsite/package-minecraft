@@ -6,6 +6,7 @@ use CMW\Entity\Votes\VotesRewardsEntity;
 use CMW\Entity\Votes\VotesSitesEntity;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Package\AbstractController;
+use CMW\Model\Minecraft\MinecraftHistoryModel;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Votes\VotesConfigModel;
@@ -31,14 +32,14 @@ class VoteMinecraftController extends AbstractController
         $userPseudo = UsersModel::getInstance()->getUserById($userId)?->getPseudo();
 
         if (VotesConfigModel::getInstance()->getConfig()?->isEnableApi()) {
-            $this->sendRewardsToCmwLink($rewardAction, $userPseudo);
+            $this->sendRewardsToCmwLink($rewardAction, $userPseudo, $userId, $rewardTitle);
             $this->sendVoteToCmwLink($rewardAction, $rewardTitle, $siteName, $userPseudo);
         } else {
             // TODO @Teyir SEND MC NEEDS WITHOUT API
         }
     }
 
-    private function sendRewardsToCmwLink(string $rewardAction, string $userPseudo): void
+    private function sendRewardsToCmwLink(string $rewardAction, string $userPseudo, int $userId, string $rewardTitle): void
     {
         try {
             foreach (json_decode($rewardAction, false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
@@ -67,6 +68,13 @@ class VoteMinecraftController extends AbstractController
                 // Send the commands to the server
                 echo APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$userPseudo/$formattedCommands",
                     cmwlToken: $server?->getServerCMWToken());
+
+                MinecraftHistoryModel::getInstance()->addHistory(
+                    $userId,
+                    $server?->getServerName() ?? 'N/A',
+                    'Vous avez voté',
+                    'Vous avez obtenus ' . $rewardTitle . ' en votant'
+                );
             }
         } catch (JsonException $e) {
             echo 'Internal Error. ' . $e;

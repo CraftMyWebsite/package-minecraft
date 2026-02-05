@@ -2,8 +2,10 @@
 
 namespace CMW\Package\Minecraft;
 
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\IPackageConfigV2;
 use CMW\Manager\Package\PackageMenuType;
+use CMW\Manager\Package\PackageSubMenuType;
 
 class Package implements IPackageConfigV2
 {
@@ -14,7 +16,7 @@ class Package implements IPackageConfigV2
 
     public function version(): string
     {
-        return '1.2.1';
+        return '1.2.2';
     }
 
     public function authors(): array
@@ -38,8 +40,20 @@ class Package implements IPackageConfigV2
             new PackageMenuType(
                 icon: 'fas fa-cube',
                 title: 'Minecraft',
-                url: 'minecraft/servers',
-                permission: 'minecraft.list'
+                url: null,
+                permission: null,
+                subMenus: [
+                    new PackageSubMenuType(
+                        title: LangManager::translate('minecraft.menu.servers'),
+                        permission: 'minecraft.list',
+                        url: 'minecraft/servers',
+                    ),
+                    new PackageSubMenuType(
+                        title: LangManager::translate('minecraft.menu.history'),
+                        permission: 'minecraft.history',
+                        url: 'minecraft/history',
+                    ),
+                ]
             ),
         ];
     }

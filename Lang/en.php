@@ -8,7 +8,7 @@ return [
         'modal' => [
             'editing' => 'Editing :',
             'delete' => 'Delete :',
-            'deletealert' => 'Deleting your server is permanent',
+            'deletealert' => 'The deletion of your server is permanent.<br>If CMW-Link was active, you will need to delete the settings.json file from your plugin in order to create a new link.',
             'add' => [
                 'title' => 'Add a new server',
                 'name' => 'Server name',
@@ -61,6 +61,7 @@ return [
                 'add' => 'Add',
                 'edit' => 'Edit',
             ],
+            'history' => 'View history',
         ],
     ],
     'implementations' => [
@@ -76,5 +77,10 @@ return [
             'server' => 'Servers:',
             'know' => '<b>Important Information.</b><p>- Do not use "/" in the commands<br>- Use {player} to retrieve the player\'s name.<br>- CTRL+CLICK to select multiple servers</p>',
         ],
+    ],
+    'menu' => [
+        'servers' => 'Manage servers',
+        'history' => 'Reward history',
+        'public' => 'User reward history',
     ],
 ];

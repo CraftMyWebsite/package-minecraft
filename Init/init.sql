@@ -15,3 +15,18 @@ CREATE TABLE IF NOT EXISTS `cmw_minecraft_servers`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `cmw_minecraft_history`
+(
+    minecraft_history_id           INT AUTO_INCREMENT PRIMARY KEY,
+    user_id                        INT NOT NULL,
+    minecraft_history_server_name  VARCHAR(255) NOT NULL,
+    minecraft_history_title        VARCHAR(255) NULL,
+    minecraft_history_desc         VARCHAR(255) NULL,
+    minecraft_history_created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    minecraft_history_updated_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_user_id_minecraft_history FOREIGN KEY (user_id)
+    REFERENCES cmw_users (user_id) ON UPDATE CASCADE ON DELETE CASCADE
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;

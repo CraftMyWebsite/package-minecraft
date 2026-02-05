@@ -5,6 +5,7 @@ namespace CMW\Controller\Minecraft\Rewards;
 use CMW\Entity\ShiFuMi\ShiFuMiRewardsEntity;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Package\AbstractController;
+use CMW\Model\Minecraft\MinecraftHistoryModel;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Users\UsersModel;
 
@@ -25,10 +26,10 @@ class shiFuMIMinecraftController extends AbstractController
         $rewardAction = $reward->getAction();
         $userPseudo = UsersModel::getInstance()->getUserById($userId)?->getPseudo();
 
-        $this->sendRewardsToCmwLink($rewardAction, $userPseudo);
+        $this->sendRewardsToCmwLink($rewardAction, $userPseudo, $userId, $reward->getTitle());
     }
 
-    private function sendRewardsToCmwLink(string $rewardAction, string $userPseudo): void
+    private function sendRewardsToCmwLink(string $rewardAction, string $userPseudo, int $userId, string $rewardTitle): void
     {
             foreach (json_decode($rewardAction, false, 512, JSON_THROW_ON_ERROR)->servers as $serverId) {
                 $server = MinecraftModel::getInstance()->getServerById($serverId);
@@ -57,6 +58,13 @@ class shiFuMIMinecraftController extends AbstractController
                 //TODO : ShiFuMi
                 APIManager::getRequest("http://{$server?->getServerIp()}:{$server?->getServerCMWLPort()}/votes/send/reward/$userPseudo/$formattedCommands",
                     cmwlToken: $server?->getServerCMWToken());
+
+                MinecraftHistoryModel::getInstance()->addHistory(
+                    $userId,
+                    $server?->getServerName() ?? 'N/A',
+                    'Victoire au ShiFuMi',
+                    'Vous avez obtenus ' . $rewardTitle . ' en gagnant une partie'
+                );
             }
     }
 }

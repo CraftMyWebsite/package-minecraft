@@ -9,6 +9,7 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
+use CMW\Model\Minecraft\MinecraftHistoryModel;
 use CMW\Model\Minecraft\MinecraftModel;
 use CMW\Model\Shop\Item\ShopItemsVirtualRequirementModel;
 use function base64_encode;
@@ -34,15 +35,30 @@ class ShopMinecraftController extends AbstractController
 
         $activeServers = [];
         foreach ($servers as $server) {
-            $activeServer = ShopItemsVirtualRequirementModel::getInstance()->getSetting($varName . '_server' . $server->getServerId() . '_', $item->getId());
+            $isActive = ShopItemsVirtualRequirementModel::getInstance()->getSetting(
+                $varName . '_server' . $server->getServerId() . '_',
+                $item->getId()
+            );
 
-            $activeServers[] = $activeServer;
+            if (!is_null($isActive)) {
+                $activeServers[] = $server;
+            }
         }
 
-        foreach ($activeServers as $serverSelected) {
-            if (!is_null($serverSelected)) {
-                $this->sendItemsToCmwLink($serverSelected, $command, $userPseudo, $item->getName());
-            }
+        foreach ($activeServers as $server) {
+            $this->sendItemsToCmwLink(
+                $server->getServerId(),
+                $command,
+                $userPseudo,
+                $item->getName()
+            );
+
+            MinecraftHistoryModel::getInstance()->addHistory(
+                $user->getId(),
+                $server->getServerName(),
+                'Achat sur la boutique',
+                'Vous avez acheté ' . $item->getName() . ' sur la boutique'
+            );
         }
     }
 

@@ -12,7 +12,7 @@ $description = LangManager::translate('minecraft.servers.desc');
 ?>
 
 <div class="page-title">
-    <h3><i class="fas fa-cube"></i> Minecraft</h3>
+    <h3><i class="fas fa-cube"></i> <?= LangManager::translate('minecraft.menu.servers') ?></h3>
     <a href="https://craftmywebsite.fr/market/details/cmw-link" target="_blank" class="btn-primary"><?= LangManager::translate('minecraft.servers.download') ?></a>
 </div>
 

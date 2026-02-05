@@ -13,7 +13,9 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
+use CMW\Model\Minecraft\MinecraftHistoryModel;
 use CMW\Model\Minecraft\MinecraftModel;
+use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use xPaw\MinecraftPing;
@@ -118,6 +120,38 @@ class MinecraftController extends AbstractController
             ->view();
     }
 
+    #[Link('/history', Link::GET, [], '/cmw-admin/minecraft')]
+    private function adminHistory(): void
+    {
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'minecraft.history');
+
+        $users = UsersModel::getInstance()->getUsers();
+        $historyModel = MinecraftHistoryModel::getInstance();
+
+        View::createAdminView('Minecraft', 'history')
+            ->addVariableList(compact('users', 'historyModel'))
+            ->addStyle('Admin/Resources/Assets/Css/simple-datatables.css')
+            ->addScriptAfter('Admin/Resources/Vendors/Simple-datatables/simple-datatables.js',
+                'Admin/Resources/Vendors/Simple-datatables/config-datatables.js')
+            ->view();
+    }
+
+    #[Link('/history/:userId', Link::GET, [], '/cmw-admin/minecraft')]
+    private function adminHistoryUser(int $userId): void
+    {
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'minecraft.history');
+
+        $user = UsersModel::getInstance()->getUserById($userId);
+        $userHistories = MinecraftHistoryModel::getInstance()->getFullHistoryByUserId($userId);
+
+        View::createAdminView('Minecraft', 'historyView')
+            ->addVariableList(compact('user', 'userHistories'))
+            ->addStyle('Admin/Resources/Assets/Css/simple-datatables.css')
+            ->addScriptAfter('Admin/Resources/Vendors/Simple-datatables/simple-datatables.js',
+                'Admin/Resources/Vendors/Simple-datatables/config-datatables.js')
+            ->view();
+    }
+
     #[Link('/servers/fav/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/minecraft')]
     private function adminServersFav(int $serverId): void
     {
@@ -137,7 +171,7 @@ class MinecraftController extends AbstractController
 
         [$name, $ip, $status, $port, $cmwlPort] = Utils::filterInput('name', 'ip', 'status', 'port', 'cmwlPort');
 
-        $server = minecraftModel::getInstance()->addServer($name, $ip, $status, ($port === '' ? null : $port), ($cmwlPort === '' ? null : $cmwlPort));
+        $server = minecraftModel::getInstance()->addServer($name, $ip, $status, ($port === '' ? null : $port), ($cmwlPort === '' ? '24102' : $cmwlPort));
 
         if (!empty($cmwlPort)) {
             $this->sendFirstKeyRequest($server?->getServerId());

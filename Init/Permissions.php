@@ -31,6 +31,10 @@ class Permissions implements IPermissionInit
                 code: 'minecraft.delete',
                 description: LangManager::translate('minecraft.permissions.minecraft.servers.delete'),
             ),
+            new PermissionInitType(
+                code: 'minecraft.history',
+                description: LangManager::translate('minecraft.permissions.minecraft.history'),
+            ),
         ];
     }
 }
